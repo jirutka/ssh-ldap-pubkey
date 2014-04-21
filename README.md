@@ -11,12 +11,12 @@ Why?
 ----
 
 When you have dozen of servers it becomes difficult to manage your authorized keys. You have to
-copy each of your public key to `~/.ssh/authorized_keys` on each of the server you want to login to
-using your SSH key. And what if you someday change your keys?
+copy all your public keys to `~/.ssh/authorized_keys` on every server you want to login to. And
+what if you someday change your keys?
 
-It’s a good practice to use some kind of centralized users database, mostly a LDAP server. There
-you have user’s login, uid, e-mail, … and password. Wouldn’t it be great to have there also public
-SSH keys? Yeah! And that’s this project about.
+It’s a good practice to use some kind of centralized users database, usually an LDAP server. There
+you have user’s login, uid, e-mail, … and password. What if we could also store public SSH keys on
+LDAP server? With this utility it’s easy as pie.
 
 
 Installation
@@ -83,8 +83,8 @@ parameters are used:
 *  **timelimit** ... search time limit in seconds (default is 10).
 *  **bind_timelimit** ... bind/connect time limit in seconds (default is 10).
 
-The only required parameter is *nss_base_passwd* or _base_, others has sensitive defaults. You
-might want to define _uri_ parameter as well. These parameter can be also defined/overriden
+The only required parameter is *nss_base_passwd* or _base_, others have sensitive defaults. You
+might want to define _uri_ parameter as well. This parameter can be also defined/overriden
 with `--bind` and `--uri` option on command line.
 
 For more information about these parameters refer to ldap.conf man page.
@@ -96,7 +96,7 @@ Setup OpenSSH server
 To configure OpenSSH server to fetch users’ authorized keys from LDAP server:
 
 1.  Make sure that you have installed **ssh-ldap-pubkey** and **ssh-ldap-pubkey-wrapper** in
-    /usr/bin with owner root and mode 0755.
+    `/usr/bin` with owner `root` and mode `0755`.
 2.  Add these two lines to /etc/ssh/sshd_config:
 
         AuthorizedKeysCommand /usr/bin/ssh-ldap-pubkey-wrapper
@@ -105,7 +105,7 @@ To configure OpenSSH server to fetch users’ authorized keys from LDAP server:
 3.  Restart sshd and check log file if there’s no problem.
 
 Note: This method is supported by OpenSSH since version 6.2-p1 (or 5.3 onRedHat). If you have an
-older version and can’t upgrade, for whatever weird reason, then use [openssh-lpk] patch instead.
+older version and can’t upgrade, for whatever weird reason, use [openssh-lpk] patch instead.
 
 
 Setup LDAP server
@@ -113,7 +113,7 @@ Setup LDAP server
 
 Just add a new schema [openssh-lpk.schema] to your LDAP server. That’s all.
 
-Note: I suppose that you’ve already setup your LDAP server for centralized unix users management,
+Note: Presumably, you’ve already setup your LDAP server for centralized unix users management,
 i.e. you have the [NIS schema](http://www.zytrax.com/books/ldap/ape/nis.html) and users in LDAP.
 
 
