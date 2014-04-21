@@ -1,8 +1,11 @@
 OpenSSH / LDAP public keys
 ==========================
+[![version](https://badge.fury.io/py/ssh-ldap-pubkey.png)](https://pypi.python.org/pypi/ssh-ldap-pubkey)
+[![downloads](https://pypip.in/d/ssh-ldap-pubkey/badge.png)](https://pypi.python.org/pypi/ssh-ldap-pubkey)
 
 This project provides an utility to manage SSH public keys stored in LDAP and also a script for
 OpenSSH server to load authorized keys from LDAP.
+
 
 Why?
 ----
@@ -14,6 +17,19 @@ using your SSH key. And what if you someday change your keys?
 It’s a good practice to use some kind of centralized users database, mostly a LDAP server. There
 you have user’s login, uid, e-mail, … and password. Wouldn’t it be great to have there also public
 SSH keys? Yeah! And that’s this project about.
+
+
+Installation
+------------
+
+Install from PyPi:
+
+    pip install ssh-ldap-pubkey
+
+…or if you’re using Gentoo (good choice!), then you can use [sys-auth/ssh-ldap-pubkey][ebuild]
+ebuild from the [CVUT Overlay][cvut-overlay].
+
+_Note: It doesn’t work with Python 3 now due to python-ldap dependency. :(_
 
 
 Usage
@@ -52,7 +68,7 @@ LDAP PAM module. An example file is included in [etc/ldap.conf][ldap.conf]. The 
 parameters are used:
 
 *  **uri** ... URI of the LDAP server to connect to. The URI scheme may be ldap, or ldaps.
-               Default is ldap://localhost.
+               Default is `ldap://localhost`.
 *  **nss_base_passwd** ... distinguished name (DN) of the search base.
 *  **base** ... distinguished name (DN) of the search base. Used when *nss_base_passwd* is not set.
 *  **scope** ... search scope; _sub_, _one_, or _base_ (default is _sub_).
@@ -99,27 +115,18 @@ Note: I suppose that you’ve already setup your LDAP server for centralized uni
 i.e. you have the [NIS schema](http://www.zytrax.com/books/ldap/ape/nis.html) and users in LDAP.
 
 
-Requirements
-------------
-
-1. Python ≥2.5 *
-2. [python-ldap]
-3. [docopt]
-
-_* I’m sorry, but this script doesn’t work with Python 3 (yet) due to python-ldap library._
-
-
 License
 -------
 
 This project is licensed under [MIT license](http://opensource.org/licenses/MIT).
 
 
-[openssh-lpk]: http://code.google.com/p/openssh-lpk/
 [python-ldap]: https://pypi.python.org/pypi/python-ldap/
-[docopt]: https://pypi.python.org/pypi/docopt/
+[ebuild]: https://github.com/cvut/gentoo-overlay/tree/master/sys-auth/ssh-ldap-pubkey
+[cvut-overlay]: https://github.com/cvut/gentoo-overlay
+[openssh-lpk]: http://code.google.com/p/openssh-lpk/
 
-[ssh-ldap-pubkey]: bin/ssh-ldap-pubkey
-[ssh-ldap-pubkey-wrapper]: bin/ssh-ldap-pubkey-wrapper
-[ldap.conf]: etc/ldap.conf
-[openssh-lpk.schema]: etc/openssh-lpk.schema
+[ssh-ldap-pubkey]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/bin/ssh-ldap-pubkey
+[ssh-ldap-pubkey-wrapper]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/bin/ssh-ldap-pubkey-wrapper
+[ldap.conf]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/etc/ldap.conf
+[openssh-lpk.schema]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/etc/openssh-lpk.schema
