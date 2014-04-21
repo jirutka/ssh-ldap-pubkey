@@ -95,11 +95,13 @@ Setup OpenSSH server
 
 To configure OpenSSH server to fetch users’ authorized keys from LDAP server:
 
-1.  Copy [ssh-ldap-pubkey] and [ssh-ldap-pubkey-wrapper] to /usr/bin with owner root and mode 0755.
+1.  Make sure that you have installed **ssh-ldap-pubkey** and **ssh-ldap-pubkey-wrapper** in
+    /usr/bin with owner root and mode 0755.
 2.  Add these two lines to /etc/ssh/sshd_config:
 
-        AuthorizedKeysCommand /usr/bin/ssh-ldap-wrapper
+        AuthorizedKeysCommand /usr/bin/ssh-ldap-pubkey-wrapper
         AuthorizedKeysCommandUser nobody
+
 3.  Restart sshd and check log file if there’s no problem.
 
 Note: This method is supported by OpenSSH since version 6.2-p1 (or 5.3 onRedHat). If you have an
@@ -126,7 +128,5 @@ This project is licensed under [MIT license](http://opensource.org/licenses/MIT)
 [cvut-overlay]: https://github.com/cvut/gentoo-overlay
 [openssh-lpk]: http://code.google.com/p/openssh-lpk/
 
-[ssh-ldap-pubkey]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/bin/ssh-ldap-pubkey
-[ssh-ldap-pubkey-wrapper]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/bin/ssh-ldap-pubkey-wrapper
 [ldap.conf]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/etc/ldap.conf
 [openssh-lpk.schema]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/etc/openssh-lpk.schema
