@@ -11,6 +11,6 @@ KEYS="`$SSH_LPK list -q -u "$SSH_USER"`"
 KEYS_COUNT=`echo "$KEYS" | wc -l`
 
 logger -i -t sshd -p info \
-	"Loaded ${KEYS_COUNT} SSH public key(s) from LDAP for user: ${SSH_USER}"
+    "Loaded ${KEYS_COUNT} SSH public key(s) from LDAP for user: ${SSH_USER}"
 
 echo "$KEYS"
