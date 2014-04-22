@@ -71,6 +71,10 @@ class LdapSSH(object):
         if not conf.uri or not conf.base:
             raise ConfigError("Base DN and LDAP URI must be provided.", 1)
 
+        if conf.cacert_dir:
+            # this is a global option!
+            ldap.set_option(ldap.OPT_X_TLS_CACERTDIR, conf.cacert_dir)
+
         self._conn = conn = ldap.initialize(conf.uri)
         try:
             conn.protocol_version = conf.ldap_version
@@ -182,6 +186,7 @@ class LdapConfig(object):
         self.search_timeout = int(conf.get('timelimit', DEFAULT_TIMEOUT))
         self.login_attr = conf.get('pam_login_attribute', DEFAULT_LOGIN_ATTR)
         self.filter = conf.get('pam_filter', DEFAULT_FILTER)
+        self.cacert_dir = conf.get('tls_cacertdir', None)
 
         self.scope = {
             'base': ldap.SCOPE_BASE,

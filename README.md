@@ -82,6 +82,8 @@ parameters are used:
 *  **bindpw** ... credentials to bind with when reading the user’s entry (default is none).
 *  **timelimit** ... search time limit in seconds (default is 10).
 *  **bind_timelimit** ... bind/connect time limit in seconds (default is 10).
+*  **tls_cacertdir** ... path of the directory with CA certificates for LDAP server certificate
+                         verification.
 
 The only required parameter is *nss_base_passwd* or _base_, others have sensitive defaults. You
 might want to define _uri_ parameter as well. These parameters can be also defined/overriden
