@@ -32,8 +32,10 @@ PATTERN                pattern that specifies public key(s) to delete, i.e.
 
 from __future__ import print_function
 
+import base64
 import ldap
 import re
+import struct
 import sys
 
 from docopt import docopt
@@ -90,6 +92,9 @@ class LdapSSH(object):
         if self._conn: self._conn.unbind_s()
 
     def add_pubkey(self, login, password, pubkey):
+        if not is_valid_openssh_pubkey(pubkey):
+            raise InvalidPubKeyError("Invalid key, not in OpenSSH Public Key format.", 1)
+
         dn = self.find_dn_by_login(login)
         self._bind(dn, password)
 
@@ -219,6 +224,7 @@ class Error(Exception):
 
 class ConfigError(Error): pass
 class InvalidCredentialsError(Error): pass
+class InvalidPubKeyError(Error): pass
 class LDAPConnectionError(Error): pass
 class NoPubKeyFoundError(Error): pass
 class PubKeyAlreadyExistsError(Error): pass
@@ -238,6 +244,26 @@ def read_stdin():
 
 def keyname(pubkey):
     return pubkey.split()[-1]
+
+
+def is_valid_openssh_pubkey(pubkey):
+    """ Validation based on http://stackoverflow.com/a/2494645/2217862 """
+    if not pubkey and len(pubkey.split()) != 3:
+        return False
+
+    key_type, data64, comment = pubkey.split()
+    try:
+        data = base64.decodestring(data64)
+    except base64.binascii.Error:
+        return False
+
+    int_len = 4
+    str_len = struct.unpack('>I', data[:int_len])[0]
+
+    if data[int_len:(int_len + str_len)] != key_type:
+        return False
+
+    return True
 
 
 def halt(msg, code=1):
