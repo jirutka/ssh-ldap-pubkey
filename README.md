@@ -113,7 +113,8 @@ older version and can’t upgrade, for whatever weird reason, use [openssh-lpk] 
 Setup LDAP server
 ------------------
 
-Just add a new schema [openssh-lpk.schema] to your LDAP server. That’s all.
+Just add the [openssh-lpk.schema] to your LDAP server, **or** add an attribute named `sshPublicKey`
+to any existing schema which is already defined in people entries. That’s all.
 
 Note: Presumably, you’ve already setup your LDAP server for centralized unix users management,
 i.e. you have the [NIS schema](http://www.zytrax.com/books/ldap/ape/nis.html) and users in LDAP.
