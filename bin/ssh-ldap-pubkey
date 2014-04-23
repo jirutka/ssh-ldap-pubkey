@@ -98,6 +98,10 @@ class LdapSSH(object):
         dn = self.find_dn_by_login(login)
         self._bind(dn, password)
 
+        if self._has_pubkey(dn, pubkey):
+            raise PubKeyAlreadyExistsError(
+                "Public key %s already exists." % keyname(pubkey), 1)
+
         modlist = [(ldap.MOD_ADD, LDAP_PUBKEY_ATTR, pubkey)]
         try:
             self._conn.modify_s(dn, modlist)
@@ -109,10 +113,6 @@ class LdapSSH(object):
         except ldap.UNDEFINED_TYPE:
             raise ConfigError(
                 "LDAP server doesn't define schema for attribute: %s" % LDAP_PUBKEY_ATTR, 1)
-
-        except ldap.TYPE_OR_VALUE_EXISTS:
-            raise PubKeyAlreadyExistsError(
-                "Public SSH key %s already exists." % keyname(pubkey), 1)
 
     def find_and_remove_pubkeys(self, login, password, pattern):
         dn = self.find_dn_by_login(login)
@@ -149,6 +149,12 @@ class LdapSSH(object):
 
         return result[0][1].get(LDAP_PUBKEY_ATTR, [])
 
+    def _has_pubkey(self, dn, pubkey):
+        current = self._find_pubkeys(dn)
+        is_same_key = lambda k1, k2: k1.split()[1] == k2.split()[1]
+
+        return any(key for key in current if is_same_key(key, pubkey))
+
     def _remove_pubkey(self, dn, pubkey):
         modlist = [(ldap.MOD_DELETE, LDAP_PUBKEY_ATTR, pubkey)]
         try:
@@ -160,7 +166,7 @@ class LdapSSH(object):
 
         except ldap.NO_SUCH_ATTRIBUTE:
             raise NoPubKeyFoundError(
-                "No such public SSH key exists: %s." % keyname(pubkey), 1)
+                "No such public key exists: %s." % keyname(pubkey), 1)
 
 
 class LdapConfig(object):
