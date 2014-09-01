@@ -236,11 +236,19 @@ class UserEntryNotFoundError(Error): pass
 #######################  Functions  #######################
 
 def read_file(path):
+    """ Read file and return its content with stripped newlines.
+
+    This is foolproof against some users that are unable to copy keys properly.
+    """
     with open(path, 'r') as f:
         return "".join(f.readlines()).strip()
 
 
 def read_stdin():
+    """ Read from standard input and strip newlines.
+
+    This is foolproof against some users that are unable to copy keys properly.
+    """
     return "".join(sys.stdin.readlines()).strip()
 
 
