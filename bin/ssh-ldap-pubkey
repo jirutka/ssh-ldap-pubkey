@@ -90,7 +90,7 @@ class LdapSSH(object):
             raise LDAPConnectionError("Can't contact LDAP server.", 3)
 
     def close(self):
-        if self._conn: self._conn.unbind_s()
+        self._conn and self._conn.unbind_s()
 
     def add_pubkey(self, login, password, pubkey):
         if not is_valid_openssh_pubkey(pubkey):
@@ -166,8 +166,7 @@ class LdapSSH(object):
             self._conn.modify_s(dn, modlist)
 
         except ldap.NO_SUCH_ATTRIBUTE:
-            raise NoPubKeyFoundError(
-                "No such public key exists: %s." % keyname(pubkey), 1)
+            raise NoPubKeyFoundError("No such public key exists: %s." % keyname(pubkey), 1)
 
 
 class LdapConfig(object):
@@ -179,18 +178,14 @@ class LdapConfig(object):
         elif not quiet:
             print("Notice: Could not read config: %s; running with defaults." % path)
 
-        self.uri = conf.get('uri', None)
-        if self.uri:
-            self.uri = self.uri.split()[0]  # use just first address for now
+        if 'uri' in conf:
+            self.uri = conf['uri'].split()[0]  # use just first address for now
         else:
             host = conf.get('host', DEFAULT_HOST)
             port = conf.get('port', DEFAULT_PORT)
             self.uri = "ldap://%s:%s" % (host, port)
 
-        self.base = conf.get('nss_base_passwd', '').split('?')[0]
-        if not self.base:
-            self.base = conf.get('base', None)
-
+        self.base = conf.get('nss_base_passwd', '').split('?')[0] or conf.get('base', None)
         self.bind_dn = conf.get('binddn', None)
         self.bind_pass = conf.get('bindpw', None)
         self.ldap_version = int(conf.get('ldap_version', ldap.VERSION3))
@@ -334,5 +329,5 @@ def main(**kwargs):
 
 kwargs = docopt(__doc__, version="ssh-ldap-pubkey %s" % __version__)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main(**kwargs)
