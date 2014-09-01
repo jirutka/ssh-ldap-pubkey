@@ -209,7 +209,7 @@ class LdapConfig(object):
         with open(path, 'r') as f:
             for line in f:
                 m = re.match(r'^(\w+)\s+([^#]+\b)', line)
-                if m: conf.update([m.group(1, 2)])
+                if m: conf[m.group(1).lower()] = m.group(2)
 
         return conf
 
