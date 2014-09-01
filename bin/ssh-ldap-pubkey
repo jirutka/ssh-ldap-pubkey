@@ -253,11 +253,11 @@ def keyname(pubkey):
 
 
 def is_valid_openssh_pubkey(pubkey):
-    """ Validation based on http://stackoverflow.com/a/2494645/2217862 """
-    if not pubkey and len(pubkey.split()) != 3:
+    """ Validation based on http://stackoverflow.com/a/2494645/2217862. """
+    if not pubkey and len(pubkey.split()) < 2:
         return False
 
-    key_type, data64, comment = pubkey.split()
+    key_type, data64 = pubkey.split()[0:2]
     try:
         data = base64.decodestring(data64)
     except base64.binascii.Error:
