@@ -19,17 +19,28 @@ There you have user’s login, uid, e-mail, … and password. What if we could a
 keys on LDAP server? With this utility it’s easy as pie.
 
 
+Requirements
+------------
+
+This utility depends on [python-ldap] which (unfortunately) requires Python 2.×.
+
+It is available in most distributions as `python-ldap` package; it should be installed before
+`ssh-ldap-pubkey` unless you want to compile it yourself.
+
+Alternatively you can install `python-ldap` from PyPI, which requires additional system
+dependencies (OpenLDAP). Refer to [Stack Overflow](http://stackoverflow.com/q/4768446/240963) for
+distribution-specific information.
+
+
 Installation
 ------------
 
-Install from PyPi:
+Install from PyPI:
 
     pip install ssh-ldap-pubkey
 
 …or if you’re using Gentoo (good choice!), then you can use [sys-auth/ssh-ldap-pubkey][ebuild]
 ebuild from the [CVUT Overlay][cvut-overlay].
-
-_Note: It doesn’t work with Python 3 now due to python-ldap dependency. :(_
 
 
 Usage
@@ -133,3 +144,4 @@ This project is licensed under [MIT license](http://opensource.org/licenses/MIT)
 
 [ldap.conf]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/etc/ldap.conf
 [openssh-lpk.schema]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/etc/openssh-lpk.schema
+[python-ldap]: http://www.python-ldap.org/
