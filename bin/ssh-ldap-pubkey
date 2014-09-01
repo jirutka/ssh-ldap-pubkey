@@ -292,7 +292,7 @@ def main(**kwargs):
 
     # prompt for password
     if kwargs['add'] or kwargs['del']:
-        passw = getpass("Enter login (LDAP) password: ")
+        passw = getpass("Enter login (LDAP) password for user '%s': " % login)
 
     info = lambda msg: quiet or print(msg)
     ls = LdapSSH(conf)
