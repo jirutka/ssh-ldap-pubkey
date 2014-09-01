@@ -10,13 +10,13 @@ Usage:
   ssh-ldap-pubkey del [options] PATTERN
   ssh-ldap-pubkey --help
 
-  -                      read public key from stdin.
-  FILE                   path to the public key file to add.
-  PATTERN                pattern that specifies public key(s) to delete, i.e.
+  -                      Read public key from stdin.
+  FILE                   Path to the public key file to add.
+  PATTERN                Pattern that specifies public key(s) to delete, i.e.
                          a complete key or just a part of it.
 
 Options:
-  -b DN --base=DN        base DN where to search for the users' entry. If not
+  -b DN --base=DN        Base DN where to search for the users' entry. If not
                          provided, then it's read from the config file.
   -c FILE --conf=FILE    Path of the ldap.conf (default is /etc/ldap.conf).
                          The ldap.conf is not required when at least --base is
@@ -24,11 +24,11 @@ Options:
   -h URI --uri=URI       URI of the LDAP server to connect; loaded from the
                          config file by default. If not defined even there,
                          then it defaults to ldap://localhost.
-  -q --quiet             be quite.
-  -u LOGIN --user=LOGIN  login of the user to bind as and change public key(s)
+  -q --quiet             Be quite.
+  -u LOGIN --user=LOGIN  Login of the user to bind as and change public key(s)
                          (default is the current user).
-  -v --version           show version information.
-  --help                 show this message.
+  -v --version           Show version information.
+  --help                 Show this message.
 """
 
 from __future__ import print_function
