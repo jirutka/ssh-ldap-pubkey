@@ -5,29 +5,30 @@
 ssh-ldap-pubkey - Utility to manage SSH public keys stored in LDAP.
 
 Usage:
-ssh-ldap-pubkey list [options]
-ssh-ldap-pubkey add [options] FILE
-ssh-ldap-pubkey del [options] PATTERN
-ssh-ldap-pubkey --help
+  ssh-ldap-pubkey list [options]
+  ssh-ldap-pubkey add [options] FILE
+  ssh-ldap-pubkey del [options] PATTERN
+  ssh-ldap-pubkey --help
 
--                      read public key from stdin.
-FILE                   path to the public key file to add.
-PATTERN                pattern that specifies public key(s) to delete, i.e.
-                       a complete key or just a part of it.
+  -                      read public key from stdin.
+  FILE                   path to the public key file to add.
+  PATTERN                pattern that specifies public key(s) to delete, i.e.
+                         a complete key or just a part of it.
 
--b DN --base DN        base DN where to search for the users' entry. If not
-                       provided, then it's read from the config file.
--c FILE --conf FILE    Path of the ldap.conf (default is /etc/ldap.conf).
-                       The ldap.conf is not required when at least --base is
-                       provided.
--h URI --uri URI       URI of the LDAP server to connect; loaded from the
-                       config file by default. If not defined even there, then
-                       it defaults to ldap://localhost.
--q --quiet             be quite.
--u LOGIN --user=LOGIN  login of the user to bind as and change public key(s)
-                       (default is the current user).
--v --version           show version information.
---help                 show this message.
+Options:
+  -b DN --base=DN        base DN where to search for the users' entry. If not
+                         provided, then it's read from the config file.
+  -c FILE --conf=FILE    Path of the ldap.conf (default is /etc/ldap.conf).
+                         The ldap.conf is not required when at least --base is
+                         provided.
+  -h URI --uri=URI       URI of the LDAP server to connect; loaded from the
+                         config file by default. If not defined even there,
+                         then it defaults to ldap://localhost.
+  -q --quiet             be quite.
+  -u LOGIN --user=LOGIN  login of the user to bind as and change public key(s)
+                         (default is the current user).
+  -v --version           show version information.
+  --help                 show this message.
 """
 
 from __future__ import print_function
