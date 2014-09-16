@@ -21,14 +21,14 @@ Options:
   -c FILE --conf=FILE    Path of the ldap.conf (default is /etc/ldap.conf).
                          The ldap.conf is not required when at least --base is
                          provided.
-  -h URI --uri=URI       URI of the LDAP server to connect; loaded from the
+  -H URI --uri=URI       URI of the LDAP server to connect; loaded from the
                          config file by default. If not defined even there,
                          then it defaults to ldap://localhost.
-  -q --quiet             Be quite.
+  -q --quiet             Be quiet.
   -u LOGIN --user=LOGIN  Login of the user to bind as and change public key(s)
                          (default is the current user).
   -v --version           Show version information.
-  --help                 Show this message.
+  -h --help              Show this message.
 """
 
 from __future__ import print_function

@@ -64,7 +64,7 @@ Remove SSH public key(s) of the current user that matches the specified pattern:
 
 Specify LDAP URI and base DN on command line instead of configuration file:
 
-    ssh-ldap-pubkey list -b ou=People,dc=encom,dc=com -h ldaps://encom.com -u flynn
+    ssh-ldap-pubkey list -b ou=People,dc=encom,dc=com -H ldaps://encom.com -u flynn
 
 Show help for other options:
 
