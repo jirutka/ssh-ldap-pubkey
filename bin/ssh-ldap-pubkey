@@ -45,6 +45,8 @@ from os import access, R_OK
 
 __version__ = '0.3.0'
 
+quiet = False
+
 
 #######################  Constants  #######################
 
@@ -171,12 +173,12 @@ class LdapSSH(object):
 
 class LdapConfig(object):
 
-    def __init__(self, path, quiet=False):
+    def __init__(self, path):
         conf = {}
         if access(path, R_OK):
             conf = self._parse_file(path)
-        elif not quiet:
-            warn("Notice: Could not read config: %s; running with defaults." % path)
+        else:
+            info("Notice: Could not read config: %s; running with defaults.", path)
 
         if 'uri' in conf:
             self.uri = conf['uri'].split()[0]  # use just first address for now
@@ -278,23 +280,26 @@ def is_valid_openssh_pubkey(pubkey):
 
 def halt(msg, code=1):
     """ Print error message to stderr and exit with the specified code. """
-    print(msg, file=sys.stderr)
+    print("Error: " + msg, file=sys.stderr)
     exit(code)
 
 
-def warn(msg):
-    """ Print warning message to stderr. """
-    print(msg, file=sys.stderr)
+def info(msg, *args):
+    """ Print message to stderr unless we're quiet. """
+    if not quiet:
+        print(msg % args, file=sys.stderr)
 
 
 ##########################  Main  #########################
 
 def main(**kwargs):
-    confpath = kwargs['--conf'] or DEFAULT_CONFIG_PATH
+    global quiet
+
     quiet = kwargs['--quiet']
+    confpath = kwargs['--conf'] or DEFAULT_CONFIG_PATH
     login = kwargs['--user'] or getuser()
 
-    conf = LdapConfig(confpath, quiet)
+    conf = LdapConfig(confpath)
     if kwargs['--uri']:
         conf.uri = kwargs['--uri']
     if kwargs['--base']:
@@ -304,7 +309,6 @@ def main(**kwargs):
     if kwargs['add'] or kwargs['del']:
         passw = getpass("Enter login (LDAP) password for user '%s': " % login)
 
-    info = lambda msg: quiet or print(msg)
     ls = LdapSSH(conf)
 
     try:
@@ -315,12 +319,13 @@ def main(**kwargs):
             pubkey = read_file(kwargs['FILE']) if filesrc else read_stdin()
 
             ls.add_pubkey(login, passw, pubkey)
-            info("Key has been stored: %s" % keyname(pubkey))
+            info("Key has been stored: %s", keyname(pubkey))
 
         elif kwargs['del']:
             keys = ls.find_and_remove_pubkeys(login, passw, kwargs['PATTERN'])
             if keys:
-                info("Deleted keys: \n%s" % '\n'.join(keys))
+                info("Deleted keys:")
+                print('\n'.join(keys))
             else:
                 info("No keys found to delete.")
 
@@ -332,10 +337,10 @@ def main(**kwargs):
                 info("No public keys found.")
 
     except Error as e:
-        halt("Error: %s" % e, e.code)
+        halt(str(e), e.code)
 
     except IOError as e:
-        halt("Error: %s: %s" % (e.strerror, e.filename), 1)
+        halt("%s: %s" % (e.strerror, e.filename), 1)
 
     finally:
         ls.close()
