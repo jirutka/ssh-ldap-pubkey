@@ -176,7 +176,7 @@ class LdapConfig(object):
         if access(path, R_OK):
             conf = self._parse_file(path)
         elif not quiet:
-            print("Notice: Could not read config: %s; running with defaults." % path)
+            warn("Notice: Could not read config: %s; running with defaults." % path)
 
         if 'uri' in conf:
             self.uri = conf['uri'].split()[0]  # use just first address for now
@@ -277,8 +277,14 @@ def is_valid_openssh_pubkey(pubkey):
 
 
 def halt(msg, code=1):
+    """ Print error message to stderr and exit with the specified code. """
     print(msg, file=sys.stderr)
     exit(code)
+
+
+def warn(msg):
+    """ Print warning message to stderr. """
+    print(msg, file=sys.stderr)
 
 
 ##########################  Main  #########################
