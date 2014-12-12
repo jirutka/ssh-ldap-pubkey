@@ -4,10 +4,9 @@
 # in OpenSSHd.
 #
 
-SSH_LPK=/usr/bin/ssh-ldap-pubkey
 SSH_USER="$1"
 
-KEYS="`$SSH_LPK list -q -u "$SSH_USER"`"
+KEYS="`ssh-ldap-pubkey list -q -u "$SSH_USER"`"
 KEYS_COUNT=`echo "$KEYS" | wc -l`
 
 logger -i -t sshd -p info \
