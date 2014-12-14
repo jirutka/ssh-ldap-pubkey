@@ -43,7 +43,7 @@ from docopt import docopt
 from getpass import getpass, getuser
 from os import access, R_OK
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
 quiet = False
 
