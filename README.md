@@ -144,4 +144,3 @@ This project is licensed under [MIT license](http://opensource.org/licenses/MIT)
 
 [ldap.conf]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/etc/ldap.conf
 [openssh-lpk.schema]: https://github.com/jirutka/ssh-ldap-pubkey/blob/master/etc/openssh-lpk.schema
-[python-ldap]: http://www.python-ldap.org/
