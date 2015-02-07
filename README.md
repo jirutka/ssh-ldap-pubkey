@@ -66,6 +66,10 @@ Specify LDAP URI and base DN on command line instead of configuration file:
 
     ssh-ldap-pubkey list -b ou=People,dc=encom,dc=com -H ldaps://encom.com -u flynn
 
+As the LDAP manager, add SSH public key to LDAP for the specified user:
+
+    ssh-ldap-pubkey add -D cn=Manager,dc=encom,dc=com -u flynn ~/.ssh/id_rsa.pub
+
 Show help for other options:
 
     ssh-ldap-pubkey --help

@@ -21,6 +21,7 @@ Options:
   -c FILE --conf=FILE    Path of the ldap.conf (default is /etc/ldap.conf).
                          The ldap.conf is not required when at least --base is
                          provided.
+  -D DN --binddn=DN      DN to bind with instead of the user's DN.
   -H URI --uri=URI       URI of the LDAP server to connect; loaded from the
                          config file by default. If not defined even there,
                          then it defaults to ldap://localhost.
@@ -99,7 +100,8 @@ class LdapSSH(object):
             raise InvalidPubKeyError("Invalid key, not in OpenSSH Public Key format.", 1)
 
         dn = self.find_dn_by_login(login)
-        self._bind(dn, password)
+        if password:
+            self._bind(dn, password)
 
         if self._has_pubkey(dn, pubkey):
             raise PubKeyAlreadyExistsError(
@@ -119,7 +121,8 @@ class LdapSSH(object):
 
     def find_and_remove_pubkeys(self, login, password, pattern):
         dn = self.find_dn_by_login(login)
-        self._bind(dn, password)
+        if password:
+            self._bind(dn, password)
 
         pubkeys = [key for key in self._find_pubkeys(dn) if pattern in key]
         for key in pubkeys:
@@ -298,6 +301,7 @@ def main(**kwargs):
     quiet = kwargs['--quiet']
     confpath = kwargs['--conf'] or DEFAULT_CONFIG_PATH
     login = kwargs['--user'] or getuser()
+    passw = None
 
     conf = LdapConfig(confpath)
     if kwargs['--uri']:
@@ -306,7 +310,10 @@ def main(**kwargs):
         conf.base = kwargs['--base']
 
     # prompt for password
-    if kwargs['add'] or kwargs['del']:
+    if kwargs['--binddn']:
+        conf.bind_dn = kwargs['--binddn']
+        conf.bind_pass = getpass("Enter LDAP password for '%s': " % conf.bind_dn)
+    elif kwargs['add'] or kwargs['del']:
         passw = getpass("Enter login (LDAP) password for user '%s': " % login)
 
     ls = LdapSSH(conf)
