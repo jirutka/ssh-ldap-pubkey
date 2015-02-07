@@ -21,6 +21,9 @@ Options:
   -c FILE --conf=FILE    Path of the ldap.conf (default is /etc/ldap.conf).
                          The ldap.conf is not required when at least --base is
                          provided.
+  -D DN --binddn=DN      DN to bind to the LDAP directory. It can be used to
+                         use another identity (such as a manager) to change a
+                         user public key(s).
   -H URI --uri=URI       URI of the LDAP server to connect; loaded from the
                          config file by default. If not defined even there,
                          then it defaults to ldap://localhost.
@@ -141,8 +144,12 @@ class LdapSSH(object):
         return result[0][0]
 
     def _bind(self, dn, password):
+        conf = self.conf
         try:
-            self._conn.simple_bind_s(dn, password)
+            if conf.bind_dn and conf.bind_pass:
+                self._conn.simple_bind_s(conf.bind_dn, conf.bind_pass)
+            else:
+                self._conn.simple_bind_s(dn, password)
         except ldap.INVALID_CREDENTIALS:
             raise InvalidCredentialsError("Invalid credentials for %s." % dn, 2)
 
@@ -304,10 +311,16 @@ def main(**kwargs):
         conf.uri = kwargs['--uri']
     if kwargs['--base']:
         conf.base = kwargs['--base']
+    if kwargs['--binddn']:
+        conf.bind_dn = kwargs['--binddn']
 
     # prompt for password
     if kwargs['add'] or kwargs['del']:
-        passw = getpass("Enter login (LDAP) password for user '%s': " % login)
+        if conf.bind_dn and not conf.bind_pass:
+            conf.bind_pass = getpass("Enter login (LDAP) password for '%s': " % conf.bind_dn)
+            passw = None
+        else:
+            passw = getpass("Enter login (LDAP) password for user '%s': " % login)
 
     ls = LdapSSH(conf)
 
