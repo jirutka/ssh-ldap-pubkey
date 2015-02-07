@@ -1,7 +1,7 @@
 OpenSSH / LDAP public keys
 ==========================
-[![version](https://badge.fury.io/py/ssh-ldap-pubkey.svg?style=flat)](https://pypi.python.org/pypi/ssh-ldap-pubkey)
-[![downloads](https://pypip.in/d/ssh-ldap-pubkey/badge.svg?style=flat)](https://pypi.python.org/pypi/ssh-ldap-pubkey)
+[![version](https://img.shields.io/pypi/v/ssh-ldap-pubkey.svg?style=flat)](https://pypi.python.org/pypi/ssh-ldap-pubkey)
+[![downloads](https://img.shields.io/pypi/dm/ssh-ldap-pubkey.svg?style=flat)](https://pypi.python.org/pypi/ssh-ldap-pubkey)
 
 This project provides an utility to manage SSH public keys stored in LDAP and also a script for
 OpenSSH server to load authorized keys from LDAP.
