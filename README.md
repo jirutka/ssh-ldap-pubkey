@@ -93,7 +93,7 @@ parameters are used:
 *  **pam_login_attribute** ... the user ID attribute (default is _uid_).
 *  **ldap_version** ... LDAP version to use (default is 3).
 *  **binddn** ... distinguished name (DN) to bind when reading the user’s entry (default is to bind
-*                 anonymously).
+                  anonymously).
 *  **bindpw** ... credentials to bind with when reading the user’s entry (default is none).
 *  **timelimit** ... search time limit in seconds (default is 10).
 *  **bind_timelimit** ... bind/connect time limit in seconds (default is 10).
