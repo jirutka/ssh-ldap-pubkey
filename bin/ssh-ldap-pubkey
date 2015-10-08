@@ -119,6 +119,9 @@ class LdapSSH(object):
             raise ConfigError(
                 "LDAP server doesn't define schema for attribute: %s" % LDAP_PUBKEY_ATTR, 1)
 
+        except ldap.INSUFFICIENT_ACCESS:
+            raise InsufficientAccess("No rights to add key for %s " % dn, 2)
+
     def find_and_remove_pubkeys(self, login, password, pattern):
         dn = self.find_dn_by_login(login)
         if password:
@@ -172,6 +175,9 @@ class LdapSSH(object):
 
         except ldap.NO_SUCH_ATTRIBUTE:
             raise NoPubKeyFoundError("No such public key exists: %s." % keyname(pubkey), 1)
+
+        except ldap.INSUFFICIENT_ACCESS:
+            raise InsufficientAccess("No rights to remove key for %s " % dn, 2)
 
 
 class LdapConfig(object):
@@ -232,6 +238,7 @@ class Error(Exception):
 class ConfigError(Error): pass
 class InvalidCredentialsError(Error): pass
 class InvalidPubKeyError(Error): pass
+class InsufficientAccess(Error): pass
 class LDAPConnectionError(Error): pass
 class NoPubKeyFoundError(Error): pass
 class PubKeyAlreadyExistsError(Error): pass
