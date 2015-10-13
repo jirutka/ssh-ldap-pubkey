@@ -27,6 +27,7 @@ setup(
     author='Jakub Jirutka',
     author_email='jakub@jirutka.cz',
     license='MIT',
+    packages=['ssh_ldap_pubkey'],
     scripts=['bin/ssh-ldap-pubkey', 'bin/ssh-ldap-pubkey-wrapper'],
     install_requires=[
         'docopt',
