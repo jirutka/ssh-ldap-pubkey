@@ -10,7 +10,9 @@ import sys
 from .exceptions import *
 
 
-__version__ = '1.0.0'
+VERSION = (1, 0, 0)
+__version__ = VERSION
+__versionstr__ = '.'.join(map(str, VERSION))
 
 DEFAULT_HOST = 'localhost'
 DEFAULT_PORT = 389

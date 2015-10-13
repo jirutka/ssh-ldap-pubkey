@@ -39,7 +39,7 @@ from docopt import docopt
 from getpass import getpass, getuser
 from os import access, R_OK
 from ssh_ldap_pubkey import LdapSSH, LdapConfig, Error, keyname, is_valid_openssh_pubkey
-from ssh_ldap_pubkey import __version__
+from ssh_ldap_pubkey import __versionstr__
 
 
 DEFAULT_CONFIG_PATH = '/etc/ldap.conf'
@@ -139,5 +139,5 @@ def main(**kwargs):
 
 
 if __name__ == '__main__':
-    kwargs = docopt(__doc__, version="ssh-ldap-pubkey %s" % __version__)
+    kwargs = docopt(__doc__, version="ssh-ldap-pubkey %s" % __versionstr__)
     main(**kwargs)
