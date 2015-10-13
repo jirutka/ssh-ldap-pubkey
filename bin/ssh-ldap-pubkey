@@ -359,8 +359,6 @@ def main(**kwargs):
     finally:
         ls.close()
 
-
-kwargs = docopt(__doc__, version="ssh-ldap-pubkey %s" % __version__)
-
 if __name__ == '__main__':
+    kwargs = docopt(__doc__, version="ssh-ldap-pubkey %s" % __version__)
     main(**kwargs)
