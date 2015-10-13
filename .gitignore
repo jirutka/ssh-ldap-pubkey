@@ -1,4 +1,11 @@
-dist/
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+
+# Distribution / packaging
+env/
 build/
-*.egg-info/
+dist/
 /MANIFEST
+*.egg-info/
+*.egg
