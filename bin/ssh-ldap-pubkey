@@ -183,11 +183,7 @@ class LdapSSH(object):
 class LdapConfig(object):
 
     def __init__(self, path):
-        conf = {}
-        if access(path, R_OK):
-            conf = self._parse_file(path)
-        else:
-            info("Notice: Could not read config: %s; running with defaults.", path)
+        conf = self._parse_file(path) if path else {}
 
         if 'uri' in conf:
             self.uri = conf['uri'].split()[0]  # use just first address for now
@@ -309,6 +305,10 @@ def main(**kwargs):
     confpath = kwargs['--conf'] or DEFAULT_CONFIG_PATH
     login = kwargs['--user'] or getuser()
     passw = None
+
+    if not access(confpath, R_OK):
+        info("Notice: Could not read config: %s; running with defaults.", confpath)
+        confpath = None
 
     conf = LdapConfig(confpath)
     if kwargs['--uri']:
