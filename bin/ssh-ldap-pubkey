@@ -323,20 +323,20 @@ def main(**kwargs):
     elif kwargs['add'] or kwargs['del']:
         passw = getpass("Enter login (LDAP) password for user '%s': " % login)
 
-    ls = LdapSSH(conf)
+    ldapssh = LdapSSH(conf)
 
     try:
-        ls.connect()
+        ldapssh.connect()
 
         if kwargs['add']:
             filesrc = kwargs['FILE'] and kwargs['FILE'] != '-'
             pubkey = read_file(kwargs['FILE']) if filesrc else read_stdin()
 
-            ls.add_pubkey(login, passw, pubkey)
+            ldapssh.add_pubkey(login, passw, pubkey)
             info("Key has been stored: %s", keyname(pubkey))
 
         elif kwargs['del']:
-            keys = ls.find_and_remove_pubkeys(login, passw, kwargs['PATTERN'])
+            keys = ldapssh.find_and_remove_pubkeys(login, passw, kwargs['PATTERN'])
             if keys:
                 info("Deleted keys:")
                 print('\n'.join(keys))
@@ -344,7 +344,7 @@ def main(**kwargs):
                 info("No keys found to delete.")
 
         else:  # list
-            keys = ls.find_pubkeys(login)
+            keys = ldapssh.find_pubkeys(login)
             if keys:
                 print('\n'.join(keys))
             else:
@@ -357,7 +357,7 @@ def main(**kwargs):
         halt("%s: %s" % (e.strerror, e.filename), 1)
 
     finally:
-        ls.close()
+        ldapssh.close()
 
 if __name__ == '__main__':
     kwargs = docopt(__doc__, version="ssh-ldap-pubkey %s" % __version__)
