@@ -1,5 +1,6 @@
 OpenSSH / LDAP public keys
 ==========================
+[![Code Climate](https://codeclimate.com/github/jirutka/ssh-ldap-pubkey/badges/gpa.svg)](https://codeclimate.com/github/jirutka/ssh-ldap-pubkey)
 [![version](https://img.shields.io/pypi/v/ssh-ldap-pubkey.svg?style=flat)](https://pypi.python.org/pypi/ssh-ldap-pubkey)
 [![downloads](https://img.shields.io/pypi/dm/ssh-ldap-pubkey.svg?style=flat)](https://pypi.python.org/pypi/ssh-ldap-pubkey)
 
