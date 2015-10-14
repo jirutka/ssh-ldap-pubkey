@@ -49,6 +49,15 @@ def is_valid_openssh_pubkey(pubkey):
     return True
 
 
+def parse_config_file(path):
+    conf = {}
+    with open(path, 'r') as f:
+        for line in f:
+            m = re.match(r'^(\w+)\s+([^#]+\b)', line)
+            if m: conf[m.group(1).lower()] = m.group(2)
+    return conf
+
+
 class LdapSSH(object):
 
     def __init__(self, conf):
@@ -167,7 +176,7 @@ class LdapSSH(object):
 class LdapConfig(object):
 
     def __init__(self, path):
-        conf = self._parse_file(path) if path else {}
+        conf = parse_config_file(path) if path else {}
 
         if 'uri' in conf:
             self.uri = conf['uri'].split()[0]  # use just first address for now
@@ -194,12 +203,3 @@ class LdapConfig(object):
 
     def __str__(self):
         return str(self.__dict__)
-
-    def _parse_file(self, path):
-        conf = {}
-        with open(path, 'r') as f:
-            for line in f:
-                m = re.match(r'^(\w+)\s+([^#]+\b)', line)
-                if m: conf[m.group(1).lower()] = m.group(2)
-
-        return conf
