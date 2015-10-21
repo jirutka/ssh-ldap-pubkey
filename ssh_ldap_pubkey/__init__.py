@@ -70,6 +70,9 @@ class LdapSSH(object):
         if not conf.uri or not conf.base:
             raise ConfigError("Base DN and LDAP URI must be provided.", 1)
 
+        ## When needed do not check the validation of the certificate, default is demand
+        ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, conf.tls_required)
+
         if conf.cacert_dir:
             # this is a global option!
             ldap.set_option(ldap.OPT_X_TLS_CACERTDIR, conf.cacert_dir)
@@ -194,6 +197,14 @@ class LdapConfig(object):
         self.login_attr = conf.get('pam_login_attribute', DEFAULT_LOGIN_ATTR)
         self.filter = conf.get('pam_filter', DEFAULT_FILTER)
         self.cacert_dir = conf.get('tls_cacertdir', None)
+
+        self.tls_required = {
+            'never': ldap.OPT_X_TLS_NEVER,
+            'allow': ldap.OPT_X_TLS_ALLOW,
+            'try': ldap.OPT_X_TLS_TRY,
+            'demand': ldap.OPT_X_TLS_DEMAND,
+            'hard': ldap.OPT_X_TLS_HARD
+        }[conf.get('tls_reqcert', 'demand')]
 
         self.scope = {
             'base': ldap.SCOPE_BASE,
