@@ -56,13 +56,39 @@ def is_valid_openssh_pubkey(pubkey):
     return True
 
 
+def parse_config(content):
+    """ Parse configuration options into a dict.
+
+    Blank lines are ignored. Lines beginning with a hash mark (`#`) are comments, and ignored.
+    Valid lines are made of an option's name (a sequence of non-blanks), followed by a value.
+    The value starts with the first non-blank character after the option's name, and terminates at
+    the end of the line, or at the last sequence of blanks before the end of the line.
+    Option names are case-insensitive, and converted to lower-case.
+
+    Arguments:
+        content (str): The content of a configuration file to parse.
+    Returns:
+        dict: Parsed options.
+    """
+    return {
+        match.group(1).lower(): match.group(2)
+        for match in (
+            re.match(r'^(\w+)\s+([^#]+\b)', line)
+            for line in content.splitlines()
+        ) if match
+    }
+
+
 def parse_config_file(path):
-    conf = {}
+    """ Same as :func:`parse_config`, but read options from a file.
+
+    Arguments:
+        path (str): Path of the file to read and parse.
+    Returns:
+        dict: Parsed options.
+    """
     with open(path, 'r') as f:
-        for line in f:
-            m = re.match(r'^(\w+)\s+([^#]+\b)', line)
-            if m: conf[m.group(1).lower()] = m.group(2)
-    return conf
+        return parse_config(f.read())
 
 
 class LdapSSH(object):
