@@ -9,3 +9,9 @@ dist/
 /MANIFEST
 *.egg-info/
 *.egg
+
+# pytest
+.cache/
+
+# Coverage report
+.coverage
