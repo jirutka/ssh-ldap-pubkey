@@ -5,8 +5,6 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-from ssh_ldap_pubkey import __versionstr__
-
 try:
     from setuptools import setup
 except ImportError:
@@ -22,7 +20,7 @@ except ImportError:
 
 setup(
     name='ssh-ldap-pubkey',
-    version=__versionstr__,
+    version='1.0.0',
     url='https://github.com/jirutka/ssh-ldap-pubkey',
     description='Utility to manage SSH public keys stored in LDAP.',
     long_description=read_md('README.md'),
