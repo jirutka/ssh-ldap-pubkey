@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from io import StringIO
-from ssh_ldap_pubkey.config import parse_config, parse_config_file
+from pytest import mark, raises
+from ssh_ldap_pubkey.config import *
 from textwrap import dedent
 
 
@@ -65,3 +66,45 @@ def describe_parse_config_file():
         assert parse_config_file('/etc/ldap.conf') == result
         open_mock.assert_called_with('/etc/ldap.conf', 'r')
         parse_config_mock.assert_called_with(content)
+
+
+def describe_parse_tls_reqcert_opt():
+
+    @mark.parametrize('value, expected', [
+        ('never',  ldap.OPT_X_TLS_NEVER),
+        ('allow',  ldap.OPT_X_TLS_ALLOW),
+        ('try',    ldap.OPT_X_TLS_TRY),
+        ('demand', ldap.OPT_X_TLS_DEMAND),
+        ('hard',   ldap.OPT_X_TLS_HARD),
+    ])
+    def returns_ldap_OPT_X_TLS_constant_for_valid_value(value, expected):
+        assert parse_tls_reqcert_opt(value) == expected
+        assert parse_tls_reqcert_opt(value.upper()) == expected
+
+    @mark.parametrize('value', [None, ''])
+    def returns_None_when_given_falsy(value):
+        assert parse_tls_reqcert_opt(value) is None
+
+    def raises_KeyError_for_invalud_value():
+        with raises(KeyError):
+            parse_tls_reqcert_opt('whatever')
+
+
+def describe_parse_scope_opt():
+
+    @mark.parametrize('value, expected', [
+        ('base', ldap.SCOPE_BASE),
+        ('one',  ldap.SCOPE_ONELEVEL),
+        ('sub',  ldap.SCOPE_SUBTREE)
+    ])
+    def returns_ldap_SCOPE_constant_for_valid_value(value, expected):
+        assert parse_scope_opt(value) == expected
+        assert parse_scope_opt(value.upper()) == expected
+
+    @mark.parametrize('value', [None, ''])
+    def returns_None_when_given_falsy(value):
+        assert parse_scope_opt(value) is None
+
+    def raises_KeyError_for_invalud_value():
+        with raises(KeyError):
+            parse_scope_opt('whatever')

@@ -45,6 +45,26 @@ def parse_config_file(path):
         return parse_config(f.read())
 
 
+def parse_tls_reqcert_opt(value):
+    """ Convert `tls_reqcert` option to ldap's `OPT_X_TLS_*` constant. """
+    return {
+        'never': ldap.OPT_X_TLS_NEVER,
+        'allow': ldap.OPT_X_TLS_ALLOW,
+        'try': ldap.OPT_X_TLS_TRY,
+        'demand': ldap.OPT_X_TLS_DEMAND,
+        'hard': ldap.OPT_X_TLS_HARD
+    }[value.lower()] if value else None
+
+
+def parse_scope_opt(value):
+    """ Convert `scope` option to ldap's `SCOPE_*` constant. """
+    return {
+        'base': ldap.SCOPE_BASE,
+        'one': ldap.SCOPE_ONELEVEL,
+        'sub': ldap.SCOPE_SUBTREE
+    }[value.lower()] if value else None
+
+
 class LdapConfig(object):
 
     def __init__(self, path):
@@ -66,21 +86,8 @@ class LdapConfig(object):
         self.login_attr = conf.get('pam_login_attribute', DEFAULT_LOGIN_ATTR)
         self.filter = conf.get('pam_filter', DEFAULT_FILTER)
         self.cacert_dir = conf.get('tls_cacertdir', None)
-
-        self.tls_require_cert = {
-            'never': ldap.OPT_X_TLS_NEVER,
-            'allow': ldap.OPT_X_TLS_ALLOW,
-            'try': ldap.OPT_X_TLS_TRY,
-            'demand': ldap.OPT_X_TLS_DEMAND,
-            'hard': ldap.OPT_X_TLS_HARD,
-            '': None
-        }[conf.get('tls_reqcert', '')]
-
-        self.scope = {
-            'base': ldap.SCOPE_BASE,
-            'one': ldap.SCOPE_ONELEVEL,
-            'sub': ldap.SCOPE_SUBTREE
-        }[conf.get('scope', DEFAULT_SCOPE)]
+        self.tls_require_cert = parse_tls_reqcert_opt(conf.get('tls_reqcert'))
+        self.scope = parse_scope_opt(conf.get('scope', DEFAULT_SCOPE))
 
     def __str__(self):
         return str(self.__dict__)
