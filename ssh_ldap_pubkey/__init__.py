@@ -38,7 +38,7 @@ def keyname(pubkey):
 
 def is_valid_openssh_pubkey(pubkey):
     """ Validation based on http://stackoverflow.com/a/2494645/2217862. """
-    if not pubkey and len(pubkey.split()) < 2:
+    if not pubkey or len(pubkey.split()) < 2:
         return False
 
     key_type, data64 = pubkey.split()[0:2]
