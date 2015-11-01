@@ -46,10 +46,10 @@ def is_valid_openssh_pubkey(pubkey):
     Returns:
         bool: `True` if the given string is a valid key, `False` otherwise.
     """
-    if not pubkey or len(pubkey.split()) < 2:
+    try:
+        key_type, data64 = pubkey.split()[0:2]
+    except (ValueError, AttributeError):
         return False
-
-    key_type, data64 = pubkey.split()[0:2]
     try:
         data = base64.decodestring(data64)
     except base64.binascii.Error:
