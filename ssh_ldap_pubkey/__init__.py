@@ -37,7 +37,15 @@ def keyname(pubkey):
 
 
 def is_valid_openssh_pubkey(pubkey):
-    """ Validation based on http://stackoverflow.com/a/2494645/2217862. """
+    """ Check if the given string is a valid OpenSSH public key.
+
+    This function is based on http://stackoverflow.com/a/2494645/2217862.
+
+    Arguments:
+        pubkey (str): The string to validate.
+    Returns:
+        bool: `True` if the given string is a valid key, `False` otherwise.
+    """
     if not pubkey or len(pubkey.split()) < 2:
         return False
 
