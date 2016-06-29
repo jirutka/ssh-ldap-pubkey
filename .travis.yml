@@ -6,4 +6,4 @@ install:
   - ./setup.py install
 script:
   - py.test --cov=ssh_ldap_pubkey --cov-report term -vv
-  - pep8
+  - pycodestyle
