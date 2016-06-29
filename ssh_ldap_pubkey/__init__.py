@@ -84,6 +84,9 @@ class LdapSSH(object):
             conn.network_timeout = conf.bind_timeout
             conn.timeout = conf.search_timeout
 
+            if conf.ssl == 'start_tls' and conf.uri.startswith('ldap://'):
+                conn.start_tls_s()
+
             if conf.bind_dn and conf.bind_pass:
                 self._bind(conf.bind_dn, conf.bind_pass)
         except ldap.SERVER_DOWN:
