@@ -96,6 +96,7 @@ parameters are used:
 *  **binddn** ... distinguished name (DN) to bind when reading the user’s entry (default is to bind
                   anonymously).
 *  **bindpw** ... credentials to bind with when reading the user’s entry (default is none).
+*  **ssl** ... LDAP SSL mechanism (off, on, start_tls)
 *  **timelimit** ... search time limit in seconds (default is 10).
 *  **bind_timelimit** ... bind/connect time limit in seconds (default is 10).
 *  **tls_cacertdir** ... path of the directory with CA certificates for LDAP server certificate
