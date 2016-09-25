@@ -54,7 +54,7 @@ def read_file(path):
     This is foolproof against some users that are unable to copy keys properly.
     """
     with open(path, 'r') as f:
-        return "".join(f.readlines()).strip()
+        return ''.join(f.readlines()).strip()
 
 
 def read_stdin():
@@ -62,12 +62,12 @@ def read_stdin():
 
     This is foolproof against some users that are unable to copy keys properly.
     """
-    return "".join(sys.stdin.readlines()).strip()
+    return ''.join(sys.stdin.readlines()).strip()
 
 
 def halt(msg, code=1):
     """ Print error message to stderr and exit with the specified code. """
-    print("Error: " + msg, file=sys.stderr)
+    print('Error: ' + msg, file=sys.stderr)
     exit(code)
 
 
@@ -117,17 +117,17 @@ def main(**kwargs):
         elif kwargs['del']:
             keys = ldapssh.find_and_remove_pubkeys(login, passw, kwargs['PATTERN'])
             if keys:
-                info("Deleted keys:")
+                info('Deleted keys:')
                 print('\n'.join(keys))
             else:
-                info("No keys found to delete.")
+                info('No keys found to delete.')
 
         else:  # list
             keys = ldapssh.find_pubkeys(login)
             if keys:
                 print('\n'.join(keys))
             else:
-                info("No public keys found.")
+                info('No public keys found.')
 
     except Error as e:
         halt(str(e), e.code)

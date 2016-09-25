@@ -74,7 +74,7 @@ class LdapSSH(object):
         conf = self.conf
 
         if not conf.uri or not conf.base:
-            raise ConfigError("Base DN and LDAP URI must be provided.", 1)
+            raise ConfigError('Base DN and LDAP URI must be provided.', 1)
 
         if conf.tls_require_cert:
             if conf.tls_require_cert not in [ldap.OPT_X_TLS_DEMAND, ldap.OPT_X_TLS_HARD]:
@@ -98,14 +98,14 @@ class LdapSSH(object):
             if conf.bind_dn and conf.bind_pass:
                 self._bind(conf.bind_dn, conf.bind_pass)
         except ldap.SERVER_DOWN:
-            raise LDAPConnectionError("Can't contact LDAP server.", 3)
+            raise LDAPConnectionError('Can\'t contact LDAP server.', 3)
 
     def close(self):
         self._conn and self._conn.unbind_s()
 
     def add_pubkey(self, login, password, pubkey):
         if not is_valid_openssh_pubkey(pubkey):
-            raise InvalidPubKeyError("Invalid key, not in OpenSSH Public Key format.", 1)
+            raise InvalidPubKeyError('Invalid key, not in OpenSSH Public Key format.', 1)
 
         dn = self.find_dn_by_login(login)
         if password:
