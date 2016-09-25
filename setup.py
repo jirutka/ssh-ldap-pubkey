@@ -31,7 +31,7 @@ setup(
     scripts=['bin/ssh-ldap-pubkey', 'bin/ssh-ldap-pubkey-wrapper'],
     install_requires=[
         'docopt',
-        'python-ldap'
+        'pyldap'
     ],
     classifiers=[
         'Environment :: Console',

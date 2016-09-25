@@ -23,14 +23,13 @@ keys on LDAP server? With this utility it’s easy as pie.
 Requirements
 ------------
 
-This utility depends on [python-ldap] which (unfortunately) requires Python 2.×.
+* Python 2.7+
+* [pyldap] \(or [python-ldap])
+* [docopt]
 
-It is available in most distributions as `python-ldap` package; it should be installed before
-`ssh-ldap-pubkey` unless you want to compile it yourself.
-
-Alternatively you can install `python-ldap` from PyPI, which requires additional system
-dependencies (OpenLDAP). Refer to [Stack Overflow](http://stackoverflow.com/q/4768446/240963) for
-distribution-specific information.
+You can install both Python modules from PyPI.
+pyldap (and python-ldap) requires additional system dependencies – OpenLDAP.
+Refer to [Stack Overflow](http://stackoverflow.com/q/4768446/240963) for distribution-specific information.
 
 
 Installation
@@ -143,7 +142,9 @@ License
 This project is licensed under [MIT license](http://opensource.org/licenses/MIT).
 
 
+[pyldap]: https://pypi.python.org/pypi/pyldap/
 [python-ldap]: https://pypi.python.org/pypi/python-ldap/
+[docopt]: https://pypi.python.org/pypi/docopt/
 [ebuild]: https://github.com/cvut/gentoo-overlay/tree/master/sys-auth/ssh-ldap-pubkey
 [cvut-overlay]: https://github.com/cvut/gentoo-overlay
 [openssh-lpk]: http://code.google.com/p/openssh-lpk/
