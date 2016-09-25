@@ -3,6 +3,7 @@ from io import StringIO
 from pytest import mark, raises
 from ssh_ldap_pubkey.config import *
 from textwrap import dedent
+from . import PY3
 
 
 def describe_parse_config():
@@ -58,7 +59,8 @@ def describe_parse_config_file():
 
     def reads_file_and_calls_parse_config(mocker):
         content = u'scope one\ntimelimit 3\n'
-        open_mock = mocker.patch('__builtin__.open', return_value=StringIO(initial_value=content))
+        open_func = 'builtins.open' if PY3 else '__builtin__.open'
+        open_mock = mocker.patch(open_func, return_value=StringIO(initial_value=content))
 
         result = {'scope': 'one', 'timelimit': '3'}
         parse_config_mock = mocker.patch('ssh_ldap_pubkey.config.parse_config', return_value=result)

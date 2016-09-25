@@ -1,9 +1,10 @@
-#!/usr/bin/env python2
-
-# fix encoding problem
+#!/usr/bin/env python
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
+
+# Fix encoding problem on Legacy Python.
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf8')
 
 try:
     from setuptools import setup
@@ -38,7 +39,8 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: POSIX',
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
         'Topic :: System',
         'Topic :: Utilities'
     ]

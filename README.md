@@ -23,7 +23,7 @@ keys on LDAP server? With this utility it’s easy as pie.
 Requirements
 ------------
 
-* Python 2.7+
+* Python 3.3+ or 2.7+
 * [pyldap] \(or [python-ldap])
 * [docopt]
 
