@@ -38,7 +38,7 @@ import sys
 from docopt import docopt
 from getpass import getpass, getuser
 from os import access, R_OK
-from ssh_ldap_pubkey import LdapSSH, Error, keyname, is_valid_openssh_pubkey
+from ssh_ldap_pubkey import LdapSSH, Error, keyname
 from ssh_ldap_pubkey.config import LdapConfig
 from ssh_ldap_pubkey import __versionstr__
 
