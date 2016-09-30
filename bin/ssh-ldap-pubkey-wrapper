@@ -2,7 +2,7 @@
 #
 # Wrapper script for ssh-ldap-pubkey to be used as AuthorizedKeysCommand
 # in OpenSSHd.
-#
+set -eu
 
 SSH_USER="$1"
 
