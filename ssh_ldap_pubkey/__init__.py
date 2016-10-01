@@ -24,14 +24,6 @@ BAD_REQCERT_WARNING = u'''
 '''
 
 
-def decode(input):
-    return input.decode('utf8')
-
-
-def encode(input):
-    return input.encode('utf8')
-
-
 def keyname(pubkey):
     return pubkey.split()[-1]
 
@@ -47,7 +39,7 @@ def is_valid_openssh_pubkey(pubkey):
         bool: `True` if the given string is a valid key, `False` otherwise.
     """
     try:
-        key_type, data64 = map(encode, pubkey.split()[0:2])
+        key_type, data64 = map(_encode, pubkey.split()[0:2])
     except (ValueError, AttributeError):
         return False
     try:
@@ -62,6 +54,14 @@ def is_valid_openssh_pubkey(pubkey):
         return False
 
     return True
+
+
+def _decode(input):
+    return input.decode('utf8')
+
+
+def _encode(input):
+    return input.encode('utf8')
 
 
 class LdapSSH(object):
@@ -115,12 +115,12 @@ class LdapSSH(object):
             raise PubKeyAlreadyExistsError(
                 "Public key %s already exists." % keyname(pubkey), 1)
 
-        modlist = [(ldap.MOD_ADD, LDAP_PUBKEY_ATTR, encode(pubkey))]
+        modlist = [(ldap.MOD_ADD, LDAP_PUBKEY_ATTR, _encode(pubkey))]
         try:
             self._conn.modify_s(dn, modlist)
 
         except ldap.OBJECT_CLASS_VIOLATION:
-            modlist += [(ldap.MOD_ADD, 'objectClass', encode(LDAP_PUBKEY_CLASS))]
+            modlist += [(ldap.MOD_ADD, 'objectClass', _encode(LDAP_PUBKEY_CLASS))]
             self._conn.modify_s(dn, modlist)
 
         except ldap.UNDEFINED_TYPE:
@@ -164,7 +164,7 @@ class LdapSSH(object):
         result = self._conn.search_s(
             dn, ldap.SCOPE_BASE, attrlist=[LDAP_PUBKEY_ATTR])
 
-        return map(decode, result[0][1].get(LDAP_PUBKEY_ATTR, []))
+        return map(_decode, result[0][1].get(LDAP_PUBKEY_ATTR, []))
 
     def _has_pubkey(self, dn, pubkey):
         current = self._find_pubkeys(dn)
@@ -173,12 +173,12 @@ class LdapSSH(object):
         return any(key for key in current if is_same_key(key, pubkey))
 
     def _remove_pubkey(self, dn, pubkey):
-        modlist = [(ldap.MOD_DELETE, LDAP_PUBKEY_ATTR, encode(pubkey))]
+        modlist = [(ldap.MOD_DELETE, LDAP_PUBKEY_ATTR, _encode(pubkey))]
         try:
             self._conn.modify_s(dn, modlist)
 
         except ldap.OBJECT_CLASS_VIOLATION:
-            modlist += [(ldap.MOD_DELETE, 'objectClass', encode(LDAP_PUBKEY_CLASS))]
+            modlist += [(ldap.MOD_DELETE, 'objectClass', _encode(LDAP_PUBKEY_CLASS))]
             self._conn.modify_s(dn, modlist)
 
         except ldap.NO_SUCH_ATTRIBUTE:
