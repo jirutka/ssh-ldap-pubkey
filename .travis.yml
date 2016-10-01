@@ -6,6 +6,8 @@ python:
   - 3.4
   - 3.5
 install:
+  # pypandoc is needed only for submitting package to pypi
+  - sed '/pypandoc/d' -i requirements.txt
   - pip install -U -r requirements.txt
   - ./setup.py install
 script:
