@@ -20,6 +20,15 @@ There you have user’s login, uid, e-mail, … and password. What if we could a
 keys on LDAP server? With this utility it’s easy as pie.
 
 
+Alternatives
+------------
+
+If you need just a lightweight utility for OpenSSH server to load authorized keys from LDAP,
+then you can use [ssh-getkey-ldap](https://github.com/jirutka/ssh-getkey-ldap) written in Lua
+or [this one](https://gist.github.com/jirutka/b15c31b2739a4f3eab63) written in POSIX shell
+(but it requires `ldapsearch` utility and may not work well on some systems).
+
+
 Requirements
 ------------
 
