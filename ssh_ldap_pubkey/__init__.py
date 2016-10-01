@@ -37,7 +37,7 @@ def keyname(pubkey):
 
 
 def is_valid_openssh_pubkey(pubkey):
-    """ Check if the given string is a valid OpenSSH public key.
+    """Check if the given string is a valid OpenSSH public key.
 
     This function is based on http://stackoverflow.com/a/2494645/2217862.
 

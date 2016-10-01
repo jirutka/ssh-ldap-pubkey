@@ -49,7 +49,7 @@ quiet = False
 
 
 def read_file(path):
-    """ Read file and return its content with stripped newlines.
+    """Read file and return its content with stripped newlines.
 
     This is foolproof against some users that are unable to copy keys properly.
     """
@@ -58,7 +58,7 @@ def read_file(path):
 
 
 def read_stdin():
-    """ Read from standard input and strip newlines.
+    """Read from standard input and strip newlines.
 
     This is foolproof against some users that are unable to copy keys properly.
     """
@@ -66,13 +66,13 @@ def read_stdin():
 
 
 def halt(msg, code=1):
-    """ Print error message to stderr and exit with the specified code. """
+    """Print error message to stderr and exit with the specified code."""
     print('Error: ' + msg, file=sys.stderr)
     exit(code)
 
 
 def info(msg, *args):
-    """ Print message to stderr unless we're quiet. """
+    """Print message to stderr unless we're quiet."""
     if not quiet:
         print(msg % args, file=sys.stderr)
 

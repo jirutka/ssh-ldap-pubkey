@@ -11,7 +11,7 @@ DEFAULT_SCOPE = 'sub'
 
 
 def parse_config(content):
-    """ Parse configuration options into a dict.
+    """Parse configuration options into a dict.
 
     Blank lines are ignored. Lines beginning with a hash mark (`#`) are comments, and ignored.
     Valid lines are made of an option's name (a sequence of non-blanks), followed by a value.
@@ -34,7 +34,7 @@ def parse_config(content):
 
 
 def parse_config_file(path):
-    """ Same as :func:`parse_config`, but read options from a file.
+    """Same as :func:`parse_config`, but read options from a file.
 
     Arguments:
         path (str): Path of the file to read and parse.
@@ -46,7 +46,7 @@ def parse_config_file(path):
 
 
 def parse_tls_reqcert_opt(value):
-    """ Convert `tls_reqcert` option to ldap's `OPT_X_TLS_*` constant. """
+    """Convert `tls_reqcert` option to ldap's `OPT_X_TLS_*` constant."""
     return {
         'never': ldap.OPT_X_TLS_NEVER,
         'allow': ldap.OPT_X_TLS_ALLOW,
@@ -57,7 +57,7 @@ def parse_tls_reqcert_opt(value):
 
 
 def parse_scope_opt(value):
-    """ Convert `scope` option to ldap's `SCOPE_*` constant. """
+    """Convert `scope` option to ldap's `SCOPE_*` constant."""
     return {
         'base': ldap.SCOPE_BASE,
         'one': ldap.SCOPE_ONELEVEL,
