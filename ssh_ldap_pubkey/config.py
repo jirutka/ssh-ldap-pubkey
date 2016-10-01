@@ -68,6 +68,12 @@ def parse_scope_opt(value):
 class LdapConfig(object):
 
     def __init__(self, path):
+        """Initialize new LdapConfig with options parsed from config file on the ``path``.
+
+        Arguments:
+            path (Optional[path]): Path to the config file to read and parse.
+                If not provided, then empty config is initialized.
+        """
         conf = parse_config_file(path) if path else {}
 
         if 'uri' in conf:

@@ -67,10 +67,23 @@ def _encode(input):
 class LdapSSH(object):
 
     def __init__(self, conf):
+        """Initialize new LdapSSH instance.
+
+        Arguments:
+            conf (LdapConfig): The LDAP configuration.
+        """
         self.conf = conf
         self._conn = None
 
     def connect(self):
+        """Connect to the LDAP server.
+        This method must be called before any other methods of this object.
+
+        Raises:
+            ConfigError: If Base DN or LDAP URI is missing in the config.
+            LDAPConnectionError: If can't connect to the LDAP server.
+            ldap.LDAPError:
+        """
         conf = self.conf
 
         if not conf.uri or not conf.base:
@@ -101,9 +114,26 @@ class LdapSSH(object):
             raise LDAPConnectionError('Can\'t contact LDAP server.', 3)
 
     def close(self):
+        """Unbind from the LDAP server."""
         self._conn and self._conn.unbind_s()
 
     def add_pubkey(self, login, password, pubkey):
+        """Add SSH public key to the user with the given ``login``.
+
+        Arguments:
+            login (str): Login of the user to add the ``pubkey``.
+            password (Optional[str]): The user's password to bind with, or None
+                to not (re)bind with the user's credentials.
+            pubkey (str): The public key to add.
+        Raises:
+            InvalidPubKeyError: If the ``pubkey`` is invalid.
+            PubKeyAlreadyExistsError: If the user already has the given ``pubkey``.
+            UserEntryNotFoundError: If the ``login`` is not found.
+            ConfigError: If LDAP server doesn't define schema for the attribute specified
+                in the config.
+            InsufficientAccessError: If the bind user doesn't have rights to add the pubkey.
+            ldap.LDAPError:
+        """
         if not is_valid_openssh_pubkey(pubkey):
             raise InvalidPubKeyError('Invalid key, not in OpenSSH Public Key format.', 1)
 
@@ -131,6 +161,21 @@ class LdapSSH(object):
             raise InsufficientAccessError("No rights to add key for %s " % dn, 2)
 
     def find_and_remove_pubkeys(self, login, password, pattern):
+        """Find and remove public keys of the user with the ``login`` that maches the ``pattern``.
+
+        Arguments:
+            login (str): Login of the user to add the ``pubkey``.
+            password (Optional[str]): The user's password to bind with, or None
+                to not (re)bind with the user's credentials.
+            pattern (str): The pattern specifying public keys to be removed.
+        Raises:
+            UserEntryNotFoundError: If the ``login`` is not found.
+            NoPubKeyFoundError: If no public key matching the ``pattern`` is found.
+            InsufficientAccessError: If the bind user doesn't have rights to add the pubkey.
+            ldap.LDAPError:
+        Returns:
+            List[str]: A list of removed public keys.
+        """
         dn = self.find_dn_by_login(login)
         if password:
             self._bind(dn, password)
@@ -142,9 +187,29 @@ class LdapSSH(object):
         return pubkeys
 
     def find_pubkeys(self, login):
+        """Return public keys of the user with the given ``login``.
+
+        Arguments:
+            login (str): The login name of the user.
+        Returns:
+            List[str]: A list of public keys.
+        Raises:
+            UserEntryNotFoundError: If the ``login`` is not found.
+            ldap.LDAPError:
+        """
         return self._find_pubkeys(self.find_dn_by_login(login))
 
     def find_dn_by_login(self, login):
+        """Returns Distinguished Name (DN) of the user with the given ``login``.
+
+        Arguments:
+            login (str): The login name of the user to find.
+        Returns:
+            str: User's DN.
+        Raises:
+            UserEntryNotFoundError: If the ``login`` is not found.
+            ldap.LDAPError:
+        """
         conf = self.conf
         filter_s = "(&(%s)(%s=%s))" % (conf.filter, conf.login_attr, login)
 
