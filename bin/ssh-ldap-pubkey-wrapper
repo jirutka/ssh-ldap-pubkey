@@ -10,6 +10,6 @@ KEYS="$(ssh-ldap-pubkey list -q -u "$SSH_USER")"
 KEYS_COUNT="$(printf '%s\n' "$KEYS" | grep '^ssh' | wc -l)"
 
 logger -i -t sshd -p info \
-    "Loaded ${KEYS_COUNT} SSH public key(s) from LDAP for user: ${SSH_USER}"
+	"Loaded ${KEYS_COUNT} SSH public key(s) from LDAP for user: ${SSH_USER}"
 
 printf '%s\n' "$KEYS"
