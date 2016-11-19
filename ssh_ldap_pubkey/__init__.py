@@ -99,7 +99,7 @@ class LdapSSH(object):
             # this is a global option!
             ldap.set_option(ldap.OPT_X_TLS_CACERTDIR, conf.cacert_dir)
 
-        self._conn = conn = ldap.initialize(conf.uri)
+        self._conn = conn = ldap.initialize(conf.uris[0])
         try:
             conn.protocol_version = conf.ldap_version
             conn.network_timeout = conf.bind_timeout
@@ -111,7 +111,14 @@ class LdapSSH(object):
             if conf.bind_dn and conf.bind_pass:
                 self._bind(conf.bind_dn, conf.bind_pass)
         except ldap.SERVER_DOWN:
-            raise LDAPConnectionError('Can\'t contact LDAP server.', 3)
+            # remove first LDAP server from list of all servers and try to connect to the next one
+            self.conf.uris.pop(0)
+            if self.conf.uris:
+                self.connect()
+            else:
+                # no LDAP server left
+                raise LDAPConnectionError('Can\'t contact LDAP server.', 3)
+
 
     def close(self):
         """Unbind from the LDAP server."""

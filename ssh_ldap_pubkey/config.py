@@ -77,7 +77,8 @@ class LdapConfig(object):
         conf = parse_config_file(path) if path else {}
 
         if 'uri' in conf:
-            self.uri = conf['uri'].split()[0]  # use just first address for now
+            self.uris = conf['uri'].split()
+            self.uri = self.uris[0]  # use just first address for now
         else:
             host = conf.get('host', DEFAULT_HOST)
             port = conf.get('port', DEFAULT_PORT)
