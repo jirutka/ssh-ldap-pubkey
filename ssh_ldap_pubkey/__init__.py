@@ -119,7 +119,6 @@ class LdapSSH(object):
                 # no LDAP server left
                 raise LDAPConnectionError('Can\'t contact LDAP server.', 3)
 
-
     def close(self):
         """Unbind from the LDAP server."""
         self._conn and self._conn.unbind_s()
