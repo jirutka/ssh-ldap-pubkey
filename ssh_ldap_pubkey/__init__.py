@@ -110,6 +110,8 @@ class LdapSSH(object):
 
             if conf.bind_dn and conf.bind_pass:
                 self._bind(conf.bind_dn, conf.bind_pass)
+            else:
+                conn.simple_bind_s()  # Bind anonymous to create a connection to the server
         except ldap.SERVER_DOWN:
             # remove first LDAP server from list of all servers and try to connect to the next one
             self.conf.uris.pop(0)
