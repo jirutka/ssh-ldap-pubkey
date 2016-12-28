@@ -77,11 +77,11 @@ class LdapConfig(object):
         conf = parse_config_file(path) if path else {}
 
         if 'uri' in conf:
-            self.uri = conf['uri'].split()[0]  # use just first address for now
+            self.uris = conf['uri']
         else:
             host = conf.get('host', DEFAULT_HOST)
             port = conf.get('port', DEFAULT_PORT)
-            self.uri = "ldap://%s:%s" % (host, port)
+            self.uris = ["ldap://%s:%s" % (host, port)]
 
         self.base = conf.get('nss_base_passwd', '').split('?')[0] or conf.get('base', None)
         self.bind_dn = conf.get('binddn', None)
@@ -95,6 +95,14 @@ class LdapConfig(object):
         self.cacert_dir = conf.get('tls_cacertdir', None)
         self.tls_require_cert = parse_tls_reqcert_opt(conf.get('tls_reqcert'))
         self.scope = parse_scope_opt(conf.get('scope', DEFAULT_SCOPE))
+
+    @property
+    def uri(self):  # for backward compatibility with <1.1.0
+        return self.uris[0] if self.uris else None
+
+    @uri.setter
+    def uri(self, uri):  # for backward compatibility with <1.1.0
+        self.uris = [uri] if uri else None
 
     def __str__(self):
         return str(self.__dict__)

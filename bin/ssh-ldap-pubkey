@@ -91,7 +91,7 @@ def main(**kwargs):
 
     conf = LdapConfig(confpath)
     if kwargs['--uri']:
-        conf.uri = kwargs['--uri']
+        conf.uris = [kwargs['--uri']]
     if kwargs['--base']:
         conf.base = kwargs['--base']
 

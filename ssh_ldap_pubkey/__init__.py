@@ -86,8 +86,8 @@ class LdapSSH(object):
         """
         conf = self.conf
 
-        if not conf.uri or not conf.base:
-            raise ConfigError('Base DN and LDAP URI must be provided.', 1)
+        if not conf.uris or not conf.base:
+            raise ConfigError('Base DN and LDAP URI(s) must be provided.', 1)
 
         if conf.tls_require_cert:
             if conf.tls_require_cert not in [ldap.OPT_X_TLS_DEMAND, ldap.OPT_X_TLS_HARD]:
@@ -99,7 +99,9 @@ class LdapSSH(object):
             # this is a global option!
             ldap.set_option(ldap.OPT_X_TLS_CACERTDIR, conf.cacert_dir)
 
-        self._conn = conn = ldap.initialize(conf.uri)
+        # NOTE: The uri argument is passed directly to the underlying openldap
+        # library that allows multiple URIs separated by a space for failover.
+        self._conn = conn = ldap.initialize(' '.join(conf.uris))
         try:
             conn.protocol_version = conf.ldap_version
             conn.network_timeout = conf.bind_timeout

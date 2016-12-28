@@ -91,8 +91,8 @@ Configuration is read from /etc/ldap.conf — file used by LDAP nameservice swit
 LDAP PAM module. An example file is included in [etc/ldap.conf][ldap.conf]. The following subset of
 parameters are used:
 
-*  **uri** ... URI of the LDAP server to connect to. The URI scheme may be ldap, or ldaps.
-               Default is `ldap://localhost`.
+*  **uri** ... URI(s) of the LDAP server(s) to connect to, separated by a space. The URI scheme may
+               be ldap, or ldaps. Default is `ldap://localhost`.
 *  **nss_base_passwd** ... distinguished name (DN) of the search base.
 *  **base** ... distinguished name (DN) of the search base. Used when *nss_base_passwd* is not set.
 *  **scope** ... search scope; _sub_, _one_, or _base_ (default is _sub_).
@@ -106,7 +106,8 @@ parameters are used:
 *  **bindpw** ... credentials to bind with when reading the user’s entry (default is none).
 *  **ssl** ... LDAP SSL/TLS method; _off_, _on_, or _start_tls_. If you use LDAP over SSL (i.e. URI `ldaps://`), leave this empty.
 *  **timelimit** ... search time limit in seconds (default is 10).
-*  **bind_timelimit** ... bind/connect time limit in seconds (default is 10).
+*  **bind_timelimit** ... bind/connect time limit in seconds (default is 10). If multiple URIs are
+                          specified in _uri_, then the next one is tried after this timeout.
 *  **tls_cacertdir** ... path of the directory with CA certificates for LDAP server certificate
                          verification.
 
