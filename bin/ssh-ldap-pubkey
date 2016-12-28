@@ -5,9 +5,9 @@
 ssh-ldap-pubkey - Utility to manage SSH public keys stored in LDAP.
 
 Usage:
-  ssh-ldap-pubkey list [options]
-  ssh-ldap-pubkey add [options] FILE
-  ssh-ldap-pubkey del [options] PATTERN
+  ssh-ldap-pubkey list [-H URI...] [options]
+  ssh-ldap-pubkey add [-H URI...] [options] FILE
+  ssh-ldap-pubkey del [-H URI...] [options] PATTERN
   ssh-ldap-pubkey --help
 
   -                      Read public key from stdin.
@@ -22,7 +22,7 @@ Options:
                          The ldap.conf is not required when at least --base is
                          provided.
   -D DN --binddn=DN      DN to bind with instead of the user's DN.
-  -H URI --uri=URI       URI of the LDAP server to connect; loaded from the
+  -H URI... --uri=URI... URI of the LDAP server to connect; loaded from the
                          config file by default. If not defined even there,
                          then it defaults to ldap://localhost.
   -q --quiet             Be quiet.
@@ -91,7 +91,7 @@ def main(**kwargs):
 
     conf = LdapConfig(confpath)
     if kwargs['--uri']:
-        conf.uris = [kwargs['--uri']]
+        conf.uris = kwargs['--uri']
     if kwargs['--base']:
         conf.base = kwargs['--base']
 
