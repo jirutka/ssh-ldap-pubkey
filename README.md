@@ -110,6 +110,10 @@ parameters are used:
                           specified in _uri_, then the next one is tried after this timeout.
 *  **tls_cacertdir** ... path of the directory with CA certificates for LDAP server certificate
                          verification.
+*  **pubkey_class** ... objectClass that should be added/removed to/from the user’s entry when adding/removing first/last public key and the *pubkey_attr* is mandatory for this class.
+   This is needed for the original openssh-lpk.schema (not for the one in this repository).
+   Default is `ldapPublicKey`.
+*  **pubkey_attr** ... name of LDAP attribute used for SSH public keys (default is `sshPublicKey`).
 
 The only required parameter is *nss_base_passwd* or _base_, others have sensitive defaults. You
 might want to define _uri_ parameter as well. These parameters can be also defined/overriden
