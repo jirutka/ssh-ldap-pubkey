@@ -97,8 +97,8 @@ class LdapConfig(object):
         self.cacert_dir = conf.get('tls_cacertdir', None)
         self.tls_require_cert = parse_tls_reqcert_opt(conf.get('tls_reqcert'))
         self.scope = parse_scope_opt(conf.get('scope', DEFAULT_SCOPE))
-        self.pubkey_class = conf.get('pubkey_class',DEFAULT_PUBKEY_CLASS)
-        self.pubkey_attr = conf.get('pubkey_attr',DEFAULT_PUBKEY_ATTR)
+        self.pubkey_class = conf.get('pubkey_class', DEFAULT_PUBKEY_CLASS)
+        self.pubkey_attr = conf.get('pubkey_attr', DEFAULT_PUBKEY_ATTR)
 
     @property
     def uri(self):  # for backward compatibility with <1.1.0
