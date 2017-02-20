@@ -110,6 +110,10 @@ parameters are used:
                           specified in _uri_, then the next one is tried after this timeout.
 *  **tls_cacertdir** ... path of the directory with CA certificates for LDAP server certificate
                          verification.
+*  **pubkey_class** ... objectClass name to use when adding or removing keys from LDAP
+                        default is ldapPublicKey
+*  **pubkey_attr** ... attributeName to use when querying keys from LDAP
+                       default is sshPublicKey
 
 The only required parameter is *nss_base_passwd* or _base_, others have sensitive defaults. You
 might want to define _uri_ parameter as well. These parameters can be also defined/overriden
