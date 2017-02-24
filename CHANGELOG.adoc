@@ -1,0 +1,85 @@
+= Changelog
+:repo-uri: https://github.com/jirutka/ssh-ldap-pubkey
+:issues: {repo-uri}/issues
+:pulls: {repo-uri}/pull
+:tags: {repo-uri}/releases/tag
+
+
+== 1.2.0 (unreleased)
+
+* Make pubkey class and attribute configurable. (PR {pulls}/21[#21])
+
+
+== link:{tags}/v1.1.1[1.1.1] (2017-01-04)
+
+* Fix parsing of `uri` from config file. ({issues}/20[#20])
+
+
+== link:{tags}/v1.1.0[1.1.0] (2016-12-28)
+
+* Add support for multiple LDAP servers in ldap.conf.
+* Allow to pass multiple `--uri` options.
+
+
+== link:{tags}/v1.0.0[1.0.0] (2016-10-01)
+
+* Refactor code-base, split it into a module and CLI script.
+* Add support for `TLS_REQCERT` option. (PR {pulls}/11[#12])
+* Add support for StartTLS. (PR {pulls}/14[#14])
+* Replace python-ldap with pyldap.
+* Make it compatible with Python 3. ({issues}/15[#15])
+* Change sshPublicKey in ldapPublicKey objectclass to be optional.
+
+
+== link:{tags}/v0.4.1[0.4.1] (2015-10-08)
+
+* Catch `ldap.INSUFFICIENT_ACCESS` exception when adding/removing key to/from LDAP and print error message. (PR {pulls}/9[#9])
+
+
+== link:{tags}/v0.4.0[0.4.0] (2015-02-07)
+
+* Add option `-D` to specify the bind DN. ({issues}/7[#7])
+
+
+== link:{tags}/v0.3.3[0.3.3] (2015-02-07)
+
+* Fix keys count in the wrapper script to return 0 instead of 1 when no key is found. (PR {pulls}/8[#8])
+
+
+== link:{tags}/v0.3.2[0.3.2] (2014-12-14)
+
+* Remove unnecessary absolute path in wrapper script. ({issues}/6[#6])
+
+
+== link:{tags}/v0.3.1[0.3.1] (2014-09-16)
+
+* Log all info and warn messages to stderr instead of stdout.
+
+
+== link:{tags}/v0.3.0[0.3.0] (2014-09-16)
+
+* Print warnings to stderr, not stdout.
+* Change script option `-h` to `-H` to avoid confusion with help.
+
+
+== link:{tags}/v0.2.3[0.2.3] (2014-09-02)
+
+* Display username in the password prompt. (PR {pulls}/3[#3])
+* Fix SSH key validation to accept keys without a comment part.
+* Treat keys in config file as case-insensitive (always convert them to lowercase).
+
+
+== link:{tags}/v0.2.2[0.2.2] (2014-04-23)
+
+* Add basic validation of SSH public key format.
+* Check if public key doesn’t already exist in the user’s entry before adding it.
+
+
+== link:{tags}/v0.2.1[0.2.1] (2014-04-22)
+
+* Handle tls_cacertdir configuration directive.
+
+
+== link:{tags}/v0.2[0.2] (2014-04-21)
+
+* First public release.
