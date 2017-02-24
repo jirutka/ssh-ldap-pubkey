@@ -44,12 +44,19 @@ Refer to [Stack Overflow](http://stackoverflow.com/q/4768446/240963) for distrib
 Installation
 ------------
 
-Install from PyPI:
+### PyPI:
 
     pip install ssh-ldap-pubkey
 
-…or if you’re using Gentoo (good choice!), then you can use [sys-auth/ssh-ldap-pubkey][ebuild]
-ebuild from the [CVUT Overlay][cvut-overlay].
+### Alpine Linux
+
+    apk add ssh-ldap-pubkey
+
+Note: The package is currently in the (official) _community_ repository; make sure that you have community in `/etc/apk/repositories`.
+
+### Gentoo
+
+You can use [sys-auth/ssh-ldap-pubkey][ebuild] ebuild from the [CVUT Overlay][cvut-overlay].
 
 
 Usage
