@@ -108,6 +108,7 @@ parameters are used:
         _objectclass=posixAccount_.
 *  **pam_login_attribute** ... the user ID attribute (default is _uid_).
 *  **ldap_version** ... LDAP version to use (default is 3).
+*  **sasl** ... enable SASL and specify mechanism to use (currently only GSSAPI is supported).
 *  **binddn** ... distinguished name (DN) to bind when reading the user’s entry (default is to bind
                   anonymously).
 *  **bindpw** ... credentials to bind with when reading the user’s entry (default is none).

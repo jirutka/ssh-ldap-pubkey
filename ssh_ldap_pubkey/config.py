@@ -89,6 +89,7 @@ class LdapConfig(object):
         self.bind_dn = conf.get('binddn', None)
         self.bind_pass = conf.get('bindpw', None)
         self.ssl = conf.get('ssl', None)
+        self.sasl = conf.get('sasl', None)
         self.ldap_version = int(conf.get('ldap_version', ldap.VERSION3))
         self.bind_timeout = int(conf.get('bind_timelimit', DEFAULT_TIMEOUT))
         self.search_timeout = int(conf.get('timelimit', DEFAULT_TIMEOUT))

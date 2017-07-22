@@ -104,6 +104,10 @@ class LdapSSH(object):
             conn.network_timeout = conf.bind_timeout
             conn.timeout = conf.search_timeout
 
+            if conf.sasl == 'GSSAPI':
+                self._bind_sasl_gssapi()
+                return
+
             if conf.ssl == 'start_tls' and conf.ldap_version >= 3:
                 conn.start_tls_s()
 
@@ -225,6 +229,9 @@ class LdapSSH(object):
             self._conn.simple_bind_s(dn, password)
         except ldap.INVALID_CREDENTIALS:
             raise InvalidCredentialsError("Invalid credentials for %s." % dn, 2)
+
+    def _bind_sasl_gssapi(self):
+        self._conn.sasl_interactive_bind_s('', ldap.sasl.sasl({}, 'GSSAPI'))
 
     def _find_pubkeys(self, dn):
         conf = self.conf
