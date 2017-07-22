@@ -5,6 +5,11 @@
 :tags: {repo-uri}/releases/tag
 
 
+== link:{tags}/v1.3.0[1.3.0] (unreleased)
+
+* Add support for SASL GSSAPI (Kerberos) authentication. (PR {pulls}/27[#27])
+
+
 == link:{tags}/v1.2.0[1.2.0] (2017-02-24)
 
 * Make pubkey class and attribute configurable. (PR {pulls}/21[#21])
