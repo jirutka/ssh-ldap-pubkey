@@ -138,8 +138,13 @@ To configure OpenSSH server to fetch users’ authorized keys from LDAP server:
     `/usr/bin` with owner `root` and mode `0755`.
 2.  Add these two lines to /etc/ssh/sshd_config:
 
+
         AuthorizedKeysCommand /usr/bin/ssh-ldap-pubkey-wrapper
         AuthorizedKeysCommandUser nobody
+
+> Note: In case you install `ssh-ldap-key` from pip, `AuthorizedKeysCommand` must be:
+
+        AuthorizedKeysCommand /usr/local/bin/ssh-ldap-pubkey-wrapper
 
 3.  Restart sshd and check log file if there’s no problem.
 
