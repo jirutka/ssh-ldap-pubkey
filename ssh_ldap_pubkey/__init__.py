@@ -96,6 +96,10 @@ class LdapSSH(object):
             # this is a global option!
             ldap.set_option(ldap.OPT_X_TLS_CACERTDIR, conf.cacert_dir)
 
+        if not conf.referrals:
+            # this is a global option!
+            ldap.set_option(ldap.OPT_REFERRALS, 0)
+
         # NOTE: The uri argument is passed directly to the underlying openldap
         # library that allows multiple URIs separated by a space for failover.
         self._conn = conn = ldap.initialize(' '.join(conf.uris))

@@ -70,6 +70,20 @@ def describe_parse_config_file():
         parse_config_mock.assert_called_with(content)
 
 
+def describe_parse_bool():
+
+    @mark.parametrize('value', ['on', 'true', 'yes', 'ON', 'TrUe'])
+    def returns_True_when_given_truthy_value(value):
+        assert parse_bool(value)
+
+    @mark.parametrize('value', ['off', 'false', 'no', 'NO', 'fooo'])
+    def returns_False_when_given_non_truthy_value(value):
+        assert not parse_bool(value)
+
+    def returns_False_when_given_None():
+        assert not parse_bool(None)
+
+
 def describe_parse_tls_reqcert_opt():
 
     @mark.parametrize('value, expected', [

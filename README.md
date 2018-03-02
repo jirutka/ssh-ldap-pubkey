@@ -103,6 +103,7 @@ parameters are used:
 *  **nss_base_passwd** ... distinguished name (DN) of the search base.
 *  **base** ... distinguished name (DN) of the search base. Used when *nss_base_passwd* is not set.
 *  **scope** ... search scope; _sub_, _one_, or _base_ (default is _sub_).
+*  **referrals** ... should client automatically follow referrals returned by LDAP servers (default is _on_)?
 *  **pam_filter** ... filter to use when searching for the user’s entry, additional to the login
         attribute value assertion (`pam_login_attribute=<login>`). Default is
         _objectclass=posixAccount_.

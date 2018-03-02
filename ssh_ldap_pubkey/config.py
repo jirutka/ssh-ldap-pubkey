@@ -8,6 +8,7 @@ DEFAULT_LOGIN_ATTR = 'uid'
 DEFAULT_PORT = 389
 DEFAULT_PUBKEY_ATTR = 'sshPublicKey'
 DEFAULT_PUBKEY_CLASS = 'ldapPublicKey'
+DEFAULT_REFERRALS = 'on'
 DEFAULT_SCOPE = 'sub'
 DEFAULT_TIMEOUT = 10
 
@@ -45,6 +46,17 @@ def parse_config_file(path):
     """
     with open(path, 'r') as f:
         return parse_config(f.read())
+
+
+def parse_bool(value):
+    """Parse string that represents a boolean value.
+
+    Arguments:
+        value (str): The value to parse.
+    Returns:
+        bool: True if the value is "on", "true", or "yes", False otherwise.
+    """
+    return (value or '').lower() in ('on', 'true', 'yes')
 
 
 def parse_tls_reqcert_opt(value):
@@ -95,6 +107,7 @@ class LdapConfig(object):
         self.login_attr = conf.get('pam_login_attribute', DEFAULT_LOGIN_ATTR)
         self.pubkey_attr = conf.get('pubkey_attr', DEFAULT_PUBKEY_ATTR)
         self.pubkey_class = conf.get('pubkey_class', DEFAULT_PUBKEY_CLASS)
+        self.referrals = parse_bool(conf.get('referrals', DEFAULT_REFERRALS))
         self.sasl = conf.get('sasl', None)
         self.scope = parse_scope_opt(conf.get('scope', DEFAULT_SCOPE))
         self.search_timeout = int(conf.get('timelimit', DEFAULT_TIMEOUT))
