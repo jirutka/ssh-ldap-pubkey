@@ -54,10 +54,6 @@ Installation
 
 Note: The package is currently in the (official) _community_ repository; make sure that you have community in `/etc/apk/repositories`.
 
-### Gentoo
-
-You can use [sys-auth/ssh-ldap-pubkey][ebuild] ebuild from the [CVUT Overlay][cvut-overlay].
-
 
 Usage
 -----
