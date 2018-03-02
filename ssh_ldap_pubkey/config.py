@@ -2,14 +2,14 @@
 import ldap
 import re
 
-DEFAULT_HOST = 'localhost'
-DEFAULT_PORT = 389
-DEFAULT_TIMEOUT = 10
-DEFAULT_LOGIN_ATTR = 'uid'
 DEFAULT_FILTER = 'objectclass=posixAccount'
-DEFAULT_SCOPE = 'sub'
-DEFAULT_PUBKEY_CLASS = 'ldapPublicKey'
+DEFAULT_HOST = 'localhost'
+DEFAULT_LOGIN_ATTR = 'uid'
+DEFAULT_PORT = 389
 DEFAULT_PUBKEY_ATTR = 'sshPublicKey'
+DEFAULT_PUBKEY_CLASS = 'ldapPublicKey'
+DEFAULT_SCOPE = 'sub'
+DEFAULT_TIMEOUT = 10
 
 
 def parse_config(content):
@@ -88,18 +88,18 @@ class LdapConfig(object):
         self.base = conf.get('nss_base_passwd', '').split('?')[0] or conf.get('base', None)
         self.bind_dn = conf.get('binddn', None)
         self.bind_pass = conf.get('bindpw', None)
-        self.ssl = conf.get('ssl', None)
-        self.sasl = conf.get('sasl', None)
-        self.ldap_version = int(conf.get('ldap_version', ldap.VERSION3))
         self.bind_timeout = int(conf.get('bind_timelimit', DEFAULT_TIMEOUT))
-        self.search_timeout = int(conf.get('timelimit', DEFAULT_TIMEOUT))
-        self.login_attr = conf.get('pam_login_attribute', DEFAULT_LOGIN_ATTR)
-        self.filter = conf.get('pam_filter', DEFAULT_FILTER)
         self.cacert_dir = conf.get('tls_cacertdir', None)
-        self.tls_require_cert = parse_tls_reqcert_opt(conf.get('tls_reqcert'))
-        self.scope = parse_scope_opt(conf.get('scope', DEFAULT_SCOPE))
-        self.pubkey_class = conf.get('pubkey_class', DEFAULT_PUBKEY_CLASS)
+        self.filter = conf.get('pam_filter', DEFAULT_FILTER)
+        self.ldap_version = int(conf.get('ldap_version', ldap.VERSION3))
+        self.login_attr = conf.get('pam_login_attribute', DEFAULT_LOGIN_ATTR)
         self.pubkey_attr = conf.get('pubkey_attr', DEFAULT_PUBKEY_ATTR)
+        self.pubkey_class = conf.get('pubkey_class', DEFAULT_PUBKEY_CLASS)
+        self.sasl = conf.get('sasl', None)
+        self.scope = parse_scope_opt(conf.get('scope', DEFAULT_SCOPE))
+        self.search_timeout = int(conf.get('timelimit', DEFAULT_TIMEOUT))
+        self.ssl = conf.get('ssl', None)
+        self.tls_require_cert = parse_tls_reqcert_opt(conf.get('tls_reqcert'))
 
     @property
     def uri(self):  # for backward compatibility with <1.1.0
