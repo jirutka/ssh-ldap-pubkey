@@ -28,9 +28,9 @@ def parse_config(content):
         dict: Parsed options.
     """
     return {
-        match.group(1).lower(): match.group(2)
+        match.group(1).lower(): match.group(2).strip()
         for match in (
-            re.match(r'^(\w+)\s+([^#]+\b)', line)
+            re.match(r'^(\w+)\s+([^#]+)', line)
             for line in content.splitlines()
         ) if match
     }
