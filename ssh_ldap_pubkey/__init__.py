@@ -220,7 +220,25 @@ class LdapSSH(object):
             ldap.LDAPError:
         """
         conf = self.conf
-        filter_s = "(&(%s)(%s=%s))" % (conf.filter, conf.login_attr, login)
+        # RFC4515 requires filters to be wrapped with parenthesis '(' and ')'.
+        # Over-wrapped filters are invalid! e.g. '((uid=x))'
+        #
+        # OpenLDAP permits simple filters to omit parenthesis entirely:
+        # e.g. 'uid=x' is automatically treated as '(uid=x)'
+        #
+        # The OpenLDAP behavior is taken as a given in many uses, which can
+        # lead to bad assumptions merging filters, because over-wrapped filters
+        # ARE still rejected.
+        #
+        # To cope with these cases, only wrap the incoming filter in
+        # parenthesis if it does NOT already have them.
+        must_wrap = conf.filter[0] != '('
+        filter_s = "(&%s%s%s(%s=%s))" % (
+            '(' if must_wrap else '',
+            conf.filter,
+            ')' if must_wrap else '',
+            conf.login_attr,
+            login)
 
         result = self._conn.search_s(conf.base, conf.scope, filter_s, ['dn'])
         if not result:
