@@ -58,11 +58,25 @@ def describe_parse_config():
 def describe_parse_config_file():
 
     def reads_file_and_calls_parse_config(mocker):
-        content = u'scope one\ntimelimit 3\n'
+        import inspect
+        # This removes the leading whitespace in this file for the test.
+        content = inspect.cleandoc(u'''
+        scope one
+        timelimit 3
+        pam_filter (objectclass=posixAccount)
+        nss_reconnect_tries 2 # number of times to double the sleep time
+        trailing_space_after_variable foobar    
+        ''')  # noqa
         open_func = 'builtins.open' if PY3 else '__builtin__.open'
         open_mock = mocker.patch(open_func, return_value=StringIO(initial_value=content))
 
-        result = {'scope': 'one', 'timelimit': '3'}
+        result = {
+            'scope': 'one',
+            'timelimit': '3',
+            'pam_filter': '(objectclass=posixAccount)',
+            'nss_reconnect_tries': '2',
+            'trailing_space_after_variable': 'foobar',
+        }
         parse_config_mock = mocker.patch('ssh_ldap_pubkey.config.parse_config', return_value=result)
 
         assert parse_config_file('/etc/ldap.conf') == result
