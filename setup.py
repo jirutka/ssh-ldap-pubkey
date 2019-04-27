@@ -21,7 +21,7 @@ except ImportError:
 
 setup(
     name='ssh-ldap-pubkey',
-    version='1.3.0',
+    version='1.3.1',
     url='https://github.com/jirutka/ssh-ldap-pubkey',
     description='Utility to manage SSH public keys stored in LDAP.',
     long_description=read_md('README.md'),

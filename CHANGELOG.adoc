@@ -5,6 +5,15 @@
 :tags: {repo-uri}/releases/tag
 
 
+== unreleased
+
+
+== link:{tags}/v1.3.1[1.3.1] (2019-04-27)
+
+* Fix handling of complex LDAP filters. (PR {pulls}/33[#33])
+* Retire Python 3.3 support (due to pyldap). (PR {pulls}/33[#33])
+
+
 == link:{tags}/v1.3.0[1.3.0] (2018-03-02)
 
 * Add support for SASL GSSAPI (Kerberos) authentication. (PR {pulls}/27[#27])
