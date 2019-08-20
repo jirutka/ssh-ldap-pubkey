@@ -8,6 +8,11 @@
 == unreleased
 
 
+== link:{tags}/v1.3.2[1.3.2] (2019-08-21)
+
+* Fix broken keys listing due to over-wrapping of search filter. ({issues}/34[#34])
+
+
 == link:{tags}/v1.3.1[1.3.1] (2019-04-27)
 
 * Fix handling of complex LDAP filters. (PR {pulls}/33[#33])
