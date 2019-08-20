@@ -235,7 +235,7 @@ class LdapSSH(object):
         # parenthesis if it does NOT already have them.
         if filter_s[0] != '(':
             filter_s = '(%s)' % filter_s
-        filter_s = "(&(%s)(%s=%s))" % (filter_s, conf.login_attr, login)
+        filter_s = "(&%s(%s=%s))" % (filter_s, conf.login_attr, login)
 
         result = self._conn.search_s(conf.base, conf.scope, filter_s, ['dn'])
         if not result:
