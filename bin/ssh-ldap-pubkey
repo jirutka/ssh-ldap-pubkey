@@ -6,39 +6,68 @@ ssh-ldap-pubkey - Utility to manage SSH public keys stored in LDAP.
 
 Usage:
   ssh-ldap-pubkey list [-H URI...] [options]
+  ssh-ldap-pubkey listall [-H URI...] [options]
   ssh-ldap-pubkey add [-H URI...] [options] FILE
+  ssh-ldap-pubkey sync [-H URI...] [options] FILE
   ssh-ldap-pubkey del [-H URI...] [options] PATTERN
   ssh-ldap-pubkey --help
 
   -                      Read public key from stdin.
-  FILE                   Path to the public key file to add.
+  FILE                   Path to the public keys file to add.
   PATTERN                Pattern that specifies public key(s) to delete, i.e.
-                         a complete key or just a part of it.
+                         a complete key or just a part of it. Use '*' to
+                         delete all public keys.
 
 Options:
+  -a ATTRS --attrs=ATTRS
+                         Comma separated list of returned attributes when
+                         listing public key(s) for all users. [default: uid]
   -b DN --base=DN        Base DN where to search for the users' entry. If not
                          provided, then it's read from the config file.
   -c FILE --conf=FILE    Path of the ldap.conf (default is /etc/ldap.conf).
                          The ldap.conf is not required when at least --base is
                          provided.
   -D DN --binddn=DN      DN to bind with instead of the user's DN.
+  -e DAYS --expire=DAYS  When adding a public key: add an expiration date, when
+                         listing public key(s): check if the key will be
+                         expired in DAYS days from today (instead of today).
+  -E --update            When adding a key, update the expiration date if the
+                         public key already exists with an other expiration
+                         date.
+  -f --file              Use a file instead of a pattern (for del)
   -H URI... --uri=URI... URI of the LDAP server to connect; loaded from the
                          config file by default. If not defined even there,
                          then it defaults to ldap://localhost.
+  -j --json              Output in json format (only for listall)
+  -m MAX --max=MAX       Max count of keys included in FILE that is allowed to
+                         be processed. If greater than MAX, no operation is
+                         performed (checked in add/update/sync).
+  -p --purge             In sync mode, purge stored entries instead of expiring
+                         them when necessary.
   -q --quiet             Be quiet.
   -u LOGIN --user=LOGIN  Login of the user to bind as and change public key(s)
                          (default is the current user).
+  -U --uid               Only display uid (only for listall)
   -v --version           Show version information.
+  -V VALIDITY --validity=VALIDITY
+                         VALIDITY can be: 'all' to list all public keys,
+                         'valid' to list only valid (i.e. unexpired) public
+                         key(s), 'invalid' to list public keys not having an
+                         expiration date, 'expired' to list expired public
+                         key(s) or 'expire' to list key(s) still valid but
+                         that will be expired in DAYS days from today having
+                         DAYS provided using -e DAYS, [default: all].
   -h --help              Show this message.
 """
 
 from __future__ import print_function
 
+import json
 import sys
 from docopt import docopt
 from getpass import getpass, getuser
 from os import access, R_OK
-from ssh_ldap_pubkey import LdapSSH, Error, keyname
+from ssh_ldap_pubkey import LdapSSH, Error, keyname, PubKeyAlreadyExistsError
 from ssh_ldap_pubkey.config import LdapConfig
 from ssh_ldap_pubkey import __versionstr__
 
@@ -65,6 +94,12 @@ def read_stdin():
     return ''.join(sys.stdin.readlines()).strip()
 
 
+def check_maxkeys(pubkeys, maxkeys=None, msg="more keys than allowed for this operation."):
+    """Check that the amount of pubkeys to process respects the limitation or abort."""
+    if maxkeys is not None and len(pubkeys.splitlines()) > maxkeys:
+        halt(msg, code=2)
+
+
 def halt(msg, code=1):
     """Print error message to stderr and exit with the specified code."""
     print('Error: ' + msg, file=sys.stderr)
@@ -84,6 +119,9 @@ def main(**kwargs):
     confpath = kwargs['--conf'] or DEFAULT_CONFIG_PATH
     login = kwargs['--user'] or getuser()
     passw = None
+    maxkeys = None
+    if kwargs['--max']:
+        maxkeys = int(kwargs['--max'])
 
     if not access(confpath, R_OK):
         info("Notice: Could not read config: %s; running with defaults.", confpath)
@@ -94,6 +132,22 @@ def main(**kwargs):
         conf.uris = kwargs['--uri']
     if kwargs['--base']:
         conf.base = kwargs['--base']
+    if kwargs['--expire']:
+        conf.expire = int(kwargs['--expire'])
+    else:
+        conf.expire = None
+    conf.purge = kwargs['--purge']
+
+    if kwargs['--uid']:
+        conf.attrs = [conf.login_attr]
+    elif kwargs['--json']:
+        conf.attrs = [a.strip() for a in kwargs['--attrs'].split(',')] + [conf.pubkey_attr]
+    else:
+        conf.attrs = [conf.pubkey_attr]
+
+    conf.validity = kwargs['--validity'].lower()
+    if conf.validity not in ('valid', 'invalid', 'expire', 'expired'):
+        conf.validity = 'all'
 
     # prompt for password
     if kwargs['--binddn']:
@@ -109,18 +163,67 @@ def main(**kwargs):
 
         if kwargs['add']:
             filesrc = kwargs['FILE'] and kwargs['FILE'] != '-'
-            pubkey = read_file(kwargs['FILE']) if filesrc else read_stdin()
+            pubkeys = read_file(kwargs['FILE']) if filesrc else read_stdin()
+            check_maxkeys(pubkeys, maxkeys,
+                          "more keys than allowed for add in %s." % kwargs['FILE'])
 
-            ldapssh.add_pubkey(login, passw, pubkey)
-            info("Key has been stored: %s", keyname(pubkey))
+            for pubkey in pubkeys.splitlines():
+                if kwargs['--update']:
+                    deleted = ldapssh.find_and_update_pubkey(login, passw, pubkey)
+                    info("Key %s has been updated (%d obsolete entry removed)" %
+                         (keyname(pubkey), len(deleted)))
+                else:
+                    try:
+                        ldapssh.add_pubkey(login, passw, pubkey)
+                        info("Key has been stored: %s", keyname(pubkey))
+                    except PubKeyAlreadyExistsError as e:
+                        info(e.args[0])
+
+        elif kwargs['sync']:
+            filesrc = kwargs['FILE'] and kwargs['FILE'] != '-'
+            pubkeys = read_file(kwargs['FILE']) if filesrc else read_stdin()
+            check_maxkeys(pubkeys, maxkeys,
+                          "more keys than allowed for sync in %s." % kwargs['FILE'])
+            if pubkeys:
+                ldapssh.sync_pubkeys(login, passw, pubkeys)
+            else:
+                info("No key to sync found in %s." % kwargs['FILE'])
 
         elif kwargs['del']:
-            keys = ldapssh.find_and_remove_pubkeys(login, passw, kwargs['PATTERN'])
-            if keys:
-                info('Deleted keys:')
-                print('\n'.join(keys))
+            if kwargs['--file']:
+                filesrc = kwargs['PATTERN'] and kwargs['PATTERN'] != '-'
+                pubkeys = read_file(kwargs['PATTERN']) if filesrc else read_stdin()
+                for pubkey in pubkeys.splitlines():
+                    rawkey = pubkey.split()[1]
+                    keys = ldapssh.find_and_remove_pubkeys(login, passw, rawkey)
+                    if keys:
+                        info("Deleted keys for %s:" % keyname(pubkey))
+                        print('\n'.join(keys))
+                    else:
+                        info("No key deleted for %s." % keyname(pubkey))
+                if not pubkeys:
+                    info("No key found to delete in %s." % kwargs['PATTERN'])
             else:
-                info('No keys found to delete.')
+                keys = ldapssh.find_and_remove_pubkeys(login, passw, kwargs['PATTERN'])
+                if keys:
+                    info('Deleted keys:')
+                    print('\n'.join(keys))
+                else:
+                    info('No keys found to delete.')
+
+        elif kwargs['listall']:
+            keys = ldapssh.find_all_pubkeys()
+            if kwargs['--json']:
+                if keys:
+                    json.dump(keys, sys.stdout, indent=2)
+                else:
+                    print('{}')
+            elif kwargs['--uid']:
+                if keys:
+                    print('\n'.join(sorted([key[conf.login_attr][0] for key in keys])))
+            else:
+                if keys:
+                    print('\n'.join(sorted(['\n'.join(sorted(key[conf.pubkey_attr])) for key in keys])))
 
         else:  # list
             keys = ldapssh.find_pubkeys(login)
