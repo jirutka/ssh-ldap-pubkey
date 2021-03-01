@@ -86,7 +86,7 @@ class LdapSSH(object):
         if not conf.uris or not conf.base:
             raise ConfigError('Base DN and LDAP URI(s) must be provided.', 1)
 
-        if conf.tls_require_cert:
+        if conf.tls_require_cert is not None:
             if conf.tls_require_cert not in [ldap.OPT_X_TLS_DEMAND, ldap.OPT_X_TLS_HARD]:
                 print(BAD_REQCERT_WARNING, file=sys.stderr)
             # this is a global option!
