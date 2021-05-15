@@ -8,6 +8,12 @@
 == unreleased
 
 
+== link:{tags}/v1.3.3[1.3.3] (2020-05-15)
+
+* Fix wrapper script to be compatible with Busybox `logger(1)`. ({issues}/43[#43])
+* Fix `tls_reqcert` value of never to be accepted when defined. (PR {pulls}/47[#47])
+
+
 == link:{tags}/v1.3.2[1.3.2] (2019-08-21)
 
 * Fix broken keys listing due to over-wrapping of search filter. ({issues}/34[#34])
