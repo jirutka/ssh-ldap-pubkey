@@ -127,7 +127,7 @@ with `--bind` and `--uri` options on command line.
 For more information about these parameters refer to ldap.conf man page.
 
 
-Setup OpenSSH server
+Set up OpenSSH server
 --------------------
 
 To configure OpenSSH server to fetch users’ authorized keys from LDAP server:
@@ -145,13 +145,13 @@ Note: This method is supported by OpenSSH since version 6.2-p1 (or 5.3 onRedHat)
 older version and can’t upgrade, for whatever weird reason, use [openssh-lpk] patch instead.
 
 
-Setup LDAP server
+Set up LDAP server
 ------------------
 
 Just add the [openssh-lpk.schema] to your LDAP server, **or** add an attribute named `sshPublicKey`
 to any existing schema which is already defined in people entries. That’s all.
 
-Note: Presumably, you’ve already setup your LDAP server for centralized unix users management,
+Note: Presumably, you’ve already set up your LDAP server for centralized unix users management,
 i.e. you have the [NIS schema](http://www.zytrax.com/books/ldap/ape/nis.html) and users in LDAP.
 
 
