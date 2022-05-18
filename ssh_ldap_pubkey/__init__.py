@@ -38,7 +38,7 @@ def is_valid_openssh_pubkey(pubkey):
     except (ValueError, AttributeError):
         return False
     try:
-        data = base64.decodestring(data64)
+        data = base64.decodebytes(data64)
     except base64.binascii.Error:
         return False
 
