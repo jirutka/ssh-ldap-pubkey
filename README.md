@@ -33,11 +33,11 @@ Requirements
 ------------
 
 * Python 3.4+ or 2.7+
-* [pyldap] \(or [python-ldap])
+* [python-ldap]
 * [docopt]
 
 You can install both Python modules from PyPI.
-pyldap (and python-ldap) requires additional system dependencies – OpenLDAP.
+python-ldap requires additional system dependencies – OpenLDAP.
 Refer to [Stack Overflow](http://stackoverflow.com/q/4768446/240963) for distribution-specific information.
 
 
@@ -161,7 +161,6 @@ License
 This project is licensed under [MIT license](http://opensource.org/licenses/MIT).
 
 
-[pyldap]: https://pypi.python.org/pypi/pyldap/
 [python-ldap]: https://pypi.python.org/pypi/python-ldap/
 [docopt]: https://pypi.python.org/pypi/docopt/
 [ebuild]: https://github.com/cvut/gentoo-overlay/tree/master/sys-auth/ssh-ldap-pubkey
