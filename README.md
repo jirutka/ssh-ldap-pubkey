@@ -32,7 +32,7 @@ or [this one](https://gist.github.com/jirutka/b15c31b2739a4f3eab63) written in P
 Requirements
 ------------
 
-* Python 3.4+ or 2.7+
+* Python 3.6+
 * [python-ldap]
 * [docopt]
 

@@ -4,7 +4,6 @@ from io import StringIO
 from pytest import mark, raises
 from ssh_ldap_pubkey.config import *
 from textwrap import dedent
-from . import PY3
 
 
 def describe_parse_config():
@@ -65,10 +64,9 @@ def describe_parse_config_file():
         timelimit 3
         pam_filter (objectclass=posixAccount)
         nss_reconnect_tries 2 # number of times to double the sleep time
-        trailing_space_after_variable foobar    
+        trailing_space_after_variable foobar
         ''')  # noqa
-        open_func = 'builtins.open' if PY3 else '__builtin__.open'
-        open_mock = mocker.patch(open_func, return_value=StringIO(initial_value=content))
+        open_mock = mocker.patch('builtins.open', return_value=StringIO(initial_value=content))
 
         result = {
             'scope': 'one',

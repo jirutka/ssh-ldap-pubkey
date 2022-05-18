@@ -1,15 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
-
-# Fix encoding problem on Legacy Python.
-if sys.version_info < (3, 0):
-    reload(sys)
-    sys.setdefaultencoding('utf8')
-
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup
 
 try:
     from pypandoc import convert
@@ -39,7 +30,6 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: POSIX',
-        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
         'Topic :: System',
         'Topic :: Utilities'
