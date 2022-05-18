@@ -14,3 +14,6 @@ indent_style = tab
 
 [bin/ssh-ldap-pubkey-wrapper]
 indent_style = tab
+
+[*.yml]
+indent_size = 2
