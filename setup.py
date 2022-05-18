@@ -2,20 +2,13 @@
 import sys
 from setuptools import setup
 
-try:
-    from pypandoc import convert
-    read_md = lambda f: convert(f, 'rst')
-except ImportError:
-    print("warning: pypandoc module not found, could not convert Markdown to RST")
-    read_md = lambda f: open(f, 'r').read()
-
-
 setup(
     name='ssh-ldap-pubkey',
     version='1.3.3',
     url='https://github.com/jirutka/ssh-ldap-pubkey',
     description='Utility to manage SSH public keys stored in LDAP.',
-    long_description=read_md('README.md'),
+    long_description=open('README.md', 'r').read(),
+    long_description_content_type='text/markdown',
     author='Jakub Jirutka',
     author_email='jakub@jirutka.cz',
     license='MIT',
