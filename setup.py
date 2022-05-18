@@ -15,8 +15,8 @@ setup(
     packages=['ssh_ldap_pubkey'],
     scripts=['bin/ssh-ldap-pubkey', 'bin/ssh-ldap-pubkey-wrapper'],
     install_requires=[
-        'docopt',
-        'python-ldap'
+        'docopt>=0.6.2,<0.7.0',
+        'python-ldap>=3.0.0,<4'
     ],
     classifiers=[
         'Environment :: Console',

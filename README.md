@@ -33,8 +33,8 @@ Requirements
 ------------
 
 * Python 3.6+
-* [python-ldap]
-* [docopt]
+* [python-ldap] 3.x
+* [docopt] 0.6.x
 
 You can install both Python modules from PyPI.
 python-ldap requires additional system dependencies – OpenLDAP.
