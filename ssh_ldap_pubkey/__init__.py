@@ -7,7 +7,7 @@ import sys
 from .exceptions import *
 
 
-VERSION = (1, 3, 3)
+VERSION = (1, 4, 0)
 __version__ = VERSION
 __versionstr__ = '.'.join(map(str, VERSION))
 

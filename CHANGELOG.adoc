@@ -7,6 +7,9 @@
 
 == unreleased
 
+
+== link:{tags}/v1.4.0[1.4.0] (2022-05-19)
+
 * Replace deprecated pyldap with python-ldap.
 * Drop support for Python 2.
 * Replace `base64.decodestring()`, which has been removed in Python 3.9, with `base64.decodebytes()`. ({issues}/49[#49])

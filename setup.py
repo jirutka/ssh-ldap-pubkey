@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='ssh-ldap-pubkey',
-    version='1.3.3',
+    version='1.4.0',
     url='https://github.com/jirutka/ssh-ldap-pubkey',
     description='Utility to manage SSH public keys stored in LDAP.',
     long_description=open('README.md', 'r').read(),
