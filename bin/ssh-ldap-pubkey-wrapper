@@ -10,8 +10,8 @@ SSH_USER="$1"
 
 SSH_USER_KEY_FILE="$(eval echo ~"$1")/.ssh/authorized_keys"
 if [ -f "$SSH_USER_KEY_FILE" ]; then
-    SSH_USER_KEY_FILE_KEYS=$(<$SSH_USER_KEY_FILE)
-    KEY_FILE_KEYS_COUNT="$(printf '%s\n' "$KEYS" | grep 'ssh-' | wc -l)"
+    SSH_USER_KEY_FILE_KEYS=$(cat $SSH_USER_KEY_FILE)
+    KEY_FILE_KEYS_COUNT="$(printf '%s\n' "$SSH_USER_KEY_FILE_KEYS" | grep 'ssh-' | wc -l)"
 else
     SSH_USER_KEY_FILE_KEYS=""
     KEY_FILE_KEYS_COUNT="0"
@@ -23,7 +23,7 @@ KEYS_COUNT="$(printf '%s\n' "$KEYS" | grep '^ssh' | wc -l)"
 logger -t sshd -p info \
 	"Loaded ${KEY_FILE_KEYS_COUNT} SSH public key(s) from authorized_keys file for user: ${SSH_USER}"
 logger -t sshd -p info \
-        "Loaded ${KEYS_COUNT} SSH public key(s) from LDAP for user: ${SSH_USER}"
+	"Loaded ${KEYS_COUNT} SSH public key(s) from LDAP for user: ${SSH_USER}"
 
 
 printf '%s\n' "$SSH_USER_KEY_FILE_KEYS"
