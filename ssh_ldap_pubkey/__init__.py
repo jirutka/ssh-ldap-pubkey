@@ -18,9 +18,76 @@ BAD_REQCERT_WARNING = u'''
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 '''
 
+def parse_key(pubkey):
+    """Split an SSH public key into its components.
+
+    Keys can have the form:
+    [options] keytype keydata [keyname/comment]
+
+    Arguments:
+        pubkey (str) The string to parse.
+    Returns:
+        tuple: A tuple of the parsed components containing
+
+        - keytype (str): the ssh key type.
+        - data64 (str): the base64 encoded data.
+        - comment (str or None): the keyname/comment data. None if not present.
+        - options (str or None): the ssh key options. None if not present.
+    Raises:
+        ValueError: if pubkey cannot be parsed to a public key.
+    """
+    valid_keytypes = [
+        "ssh-dss",
+        "ssh-rsa",
+        "ecdsa-sha2-nistp256",
+        "ecdsa-sha2-nistp384",
+        "ecdsa-sha2-nistp521",
+        "ssh-ed25519",
+    ]
+
+    # As the options field may contain spaces (within quoted strings) the
+    # parsing is not trivial. The strategy here is to find the key type field.
+    # Anything before it can be recombined into the options. The field
+    # immediately after must be the key data and the oen after that the comment.
+    comps = pubkey.split()
+
+    # Locate the key type field as an anchor point
+    for keytype_ind, key_type in enumerate(comps):
+        if key_type in valid_keytypes:
+            break
+    else:
+        raise ValueError("public key does not contain valid key type.")
+
+    # Recombine the key options
+    if comps[:keytype_ind]:
+        options = " ".join(comps[:keytype_ind])
+    else:
+        options = None
+    comps = comps[(keytype_ind + 1):]
+
+    # Get out the data field
+    if comps:
+        data64 = comps.pop(0)
+    else:
+        raise ValueError("Key does not contain a data field.")
+
+    # Get the optional comment
+    if comps:
+        comment = comps[0]
+    else:
+        comment = None
+
+    return (key_type, data64, comment, options)
+
 
 def keyname(pubkey):
-    return pubkey.split()[-1]
+    comment = parse_key(pubkey)[2]
+
+    if comment is None:
+        # Return the data as the keyname to match the previous behaviour
+        return data64
+    else:
+        return comment
 
 
 def is_valid_openssh_pubkey(pubkey):
@@ -34,7 +101,7 @@ def is_valid_openssh_pubkey(pubkey):
         bool: `True` if the given string is a valid key, `False` otherwise.
     """
     try:
-        key_type, data64 = map(_encode, pubkey.split()[0:2])
+        key_type, data64 = map(_encode, parse_key(pubkey)[:2])
     except (ValueError, AttributeError):
         return False
     try:
