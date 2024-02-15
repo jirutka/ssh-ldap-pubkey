@@ -139,7 +139,7 @@ def main(**kwargs):
     conf.purge = kwargs['--purge']
 
     if kwargs['--uid']:
-        conf.attrs = [conf.login_attr]
+        conf.attrs = [conf.login_attr] + [conf.pubkey_attr]
     elif kwargs['--json']:
         conf.attrs = [a.strip() for a in kwargs['--attrs'].split(',')] + [conf.pubkey_attr]
     else:
